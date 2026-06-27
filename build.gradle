@@ -1,0 +1,22 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.8' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+allprojects {
+    group = 'com.ssm'
+    version = '1.0.0'
+
+
+    ext {
+        jjwtVersion = '0.13.0'
+        postgresqlVersion = '42.7.11'
+        mapstructVersion = '1.6.3'
+    }
+
+
+    repositories {
+        mavenCentral()
+    }
+}
+

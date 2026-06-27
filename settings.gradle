@@ -1,0 +1,3 @@
+rootProject.name = 'smart-subscription-manager'
+
+include 'auth-service', 'core-service', 'common-events'
