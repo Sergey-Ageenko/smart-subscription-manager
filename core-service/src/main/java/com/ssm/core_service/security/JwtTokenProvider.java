@@ -21,7 +21,6 @@ public class JwtTokenProvider {
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey
     ) {
         this.secretKey = createSecretKey(secretKey);
-
     }
 
     public Claims parse(String token) {

@@ -11,7 +11,7 @@ CREATE TABLE profiles
 CREATE TABLE budgets
 (
     id            UUID PRIMARY KEY        DEFAULT gen_random_uuid(),
-    monthly_limit NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    monthly_limit NUMERIC(10, 2) NOT NULL check (monthly_limit >= 0),
     profile_id    UUID           NOT NULL UNIQUE,
 
     CONSTRAINT fk_budget_profile

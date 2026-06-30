@@ -1,7 +1,6 @@
 package com.ssm.auth_service.controller;
 
-
-import com.ssm.auth_service.aspect.annotation.ApiLog;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssm.auth_service.model.constants.ApiConstants;
 import com.ssm.auth_service.model.request.LoginRequest;
 import com.ssm.auth_service.model.request.RegisterRequest;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-@ApiLog
 public class AuthController {
 
     private final AuthService authService;
@@ -34,7 +32,6 @@ public class AuthController {
         AuthResponse authResponse = AuthResponse
                 .createSuccessfulWithNewToken(tokenResponse.accessToken());
         ResponseCookie cookie = ApiUtils.getCookieWithRefreshToken(tokenResponse.refreshToken());
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResponse);
@@ -43,13 +40,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
-            @RequestBody @Valid RegisterRequest registerRequest)
-    {
+            @RequestBody @Valid RegisterRequest registerRequest) throws JsonProcessingException {
         TokenResponse tokenResponse = authService.register(registerRequest);
         AuthResponse authResponse = AuthResponse
                 .createSuccessfulWithNewUser(tokenResponse.accessToken());
         ResponseCookie cookie = ApiUtils.getCookieWithRefreshToken(tokenResponse.refreshToken());
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResponse);
@@ -63,7 +58,6 @@ public class AuthController {
         AuthResponse authResponse = AuthResponse
                 .createSuccessfulWithNewToken(tokenResponse.accessToken());
         ResponseCookie cookie = ApiUtils.getCookieWithRefreshToken(tokenResponse.refreshToken());
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResponse);

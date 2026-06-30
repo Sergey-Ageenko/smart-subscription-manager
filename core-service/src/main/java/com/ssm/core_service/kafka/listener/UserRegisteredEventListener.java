@@ -17,7 +17,7 @@ public class UserRegisteredEventListener {
     private final ProfileService profileService;
 
     @KafkaListener(
-            topics = ApiConstants.USER_REGISTERED_TOPIC,
+            topics = ApiConstants.USER_REGISTERED,
             groupId = "core-group"
     )
     public void handle(ConsumerRecord<String, UserRegisteredEvent> record) {
@@ -26,9 +26,7 @@ public class UserRegisteredEventListener {
                     record.key(),
                     record.offset()
             );
-
             profileService.createProfile(record.value());
-
         } catch (Exception e) {
             log.error("Processing failed offset={}", record.offset(), e);
             throw e;

@@ -32,12 +32,10 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional(readOnly = true)
     public CoreResponse<ProfileResponse> getProfile(UUID profileId) {
-
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
-
         return CoreResponse.createSuccessful(
                 toResponse(profile)
         );
@@ -46,53 +44,43 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public void createProfile(UserRegisteredEvent event) {
-
         if (profileRepository.existsById(event.userId())) {
             throw new DataExistException(ApiErrorMessage.USER_PROFILE_IS_ALREADY_EXISTS.getMessage(event.userId()));
         }
-
         Profile savedProfile = profileRepository.save(
                 Profile.builder()
                         .id(event.userId())
                         .firstName(event.firstName())
                         .lastName(event.lastName())
                         .build());
-
         Budget budget = budgetRepository.save(
                 Budget.builder()
                         .monthlyLimit(BigDecimal.ZERO)
                         .profile(savedProfile)
                         .build());
-
         log.info("Profile {} with budget created successfully. Budget id = {}", savedProfile.getId(), budget.getId());
     }
 
     @Override
     @Transactional
     public CoreResponse<ProfileResponse> updateProfile(UUID profileId, ProfileUpdateRequest request) {
-
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
-
         if (StringUtils.hasText(request.firstName())) {
             profile.setFirstName(request.firstName());
         }
-
         if (StringUtils.hasText(request.lastName())) {
             profile.setLastName(request.lastName());
         }
-
         log.info("Profile {} updated successfully.", profile.getId());
-
         return CoreResponse.createSuccessful(
                 toResponse(profile)
         );
     }
 
     private ProfileResponse toResponse(Profile profile){
-
         return new ProfileResponse(
                 profile.getFirstName(),
                 profile.getLastName()

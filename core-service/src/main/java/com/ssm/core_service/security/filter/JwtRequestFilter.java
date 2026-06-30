@@ -41,46 +41,34 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
-
-
         String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String token = authHeader.substring(BEARER_PREFIX.length());
-
         try {
             Claims claims = jwtTokenProvider.parse(token);
-
             if (!jwtTokenProvider.isValid(claims)) {
                 filterChain.doFilter(request, response);
                 return;
             }
-
             UUID userId = UUID.fromString(jwtTokenProvider.getUserId(claims));
-
             List<SimpleGrantedAuthority> authorities =
                     jwtTokenProvider.getRoles(claims).stream()
                             .map(SimpleGrantedAuthority::new)
                             .toList();
-
             Authentication auth =
                     new UsernamePasswordAuthenticationToken(
                             new JwtUserPrincipal(userId),
                             null,
                             authorities
                     );
-
             SecurityContextHolder.getContext().setAuthentication(auth);
-
         } catch (JwtException | IllegalArgumentException e) {
             SecurityContextHolder.clearContext();
             request.setAttribute(ApiConstants.JWT_ERROR, ApiErrorMessage.INVALID_TOKEN);
         }
-
         filterChain.doFilter(request, response);
     }
 }

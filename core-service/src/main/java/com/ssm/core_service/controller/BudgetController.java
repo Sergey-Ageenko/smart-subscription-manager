@@ -1,6 +1,5 @@
 package com.ssm.core_service.controller;
 
-import com.ssm.core_service.aspect.annotation.ApiLog;
 import com.ssm.core_service.model.request.BudgetUpdateRequest;
 import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
@@ -17,21 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/budgets")
-@ApiLog
 public class BudgetController {
 
     private final BudgetService budgetService;
 
     @GetMapping
     public ResponseEntity<CoreResponse<BudgetResponse>> getBudget(@AuthenticationPrincipal JwtUserPrincipal principal){
-
         return ResponseEntity.ok()
                         .body(budgetService.getBudget(principal.userId()));
     }
 
     @PutMapping("/update")
     public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal JwtUserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request){
-
         return ResponseEntity.ok()
                 .body(budgetService.updateBudget(principal.userId(), request));
     }

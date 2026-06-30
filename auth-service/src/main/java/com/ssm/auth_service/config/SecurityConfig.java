@@ -58,7 +58,6 @@ public class SecurityConfig {
                         .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper()))
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
@@ -66,7 +65,6 @@ public class SecurityConfig {
     public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-
         return daoAuthenticationProvider;
     }
 

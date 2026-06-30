@@ -16,7 +16,6 @@ public class CoreResponse<P> implements Serializable {
     private P payload;
     private boolean success;
 
-
     public static <P> CoreResponse<P> createSuccessful(P payload) {
         return new CoreResponse<>(" ", payload, true);
 

@@ -21,27 +21,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-
     @Override
     @Transactional
     public JwtUserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userRepository.findByUsernameWithRoles(username)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_NOT_FOUND_BY_USERNAME.getMessage(username)));
-
         return new JwtUserPrincipal(user);
-
     }
 
     @Override
     @Transactional
     public JwtUserPrincipal loadUserById(String userId) throws UsernameNotFoundException {
-
         User user = userRepository.findByIdWithRoles(UUID.fromString(userId))
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_NOT_FOUND_BY_ID.getMessage(userId)));
-
         return new JwtUserPrincipal(user);
-
     }
 
 

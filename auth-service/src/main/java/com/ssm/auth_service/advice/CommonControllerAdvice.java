@@ -1,7 +1,5 @@
 package com.ssm.auth_service.advice;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.ssm.auth_service.model.constants.ApiErrorMessage;
 import com.ssm.auth_service.model.exception.DataExistException;
 import com.ssm.auth_service.model.exception.InvalidDataException;
@@ -12,14 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +26,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException ex, HttpServletRequest request) {
         log.warn("NotFound: {}", ex.getMessage());
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(
                         404,
@@ -45,7 +40,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(DataExistException.class)
     public ResponseEntity<ApiError> handleDataExistException(DataExistException ex, HttpServletRequest request) {
         log.warn("Conflict: {}", ex.getMessage());
-
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ApiError(
@@ -61,7 +55,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<ApiError> handleInvalidDataException(InvalidDataException ex, HttpServletRequest request) {
         log.warn("Bad request: {}", ex.getMessage());
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError(
@@ -77,7 +70,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException ex, HttpServletRequest request) {
         log.warn("Unauthorized: {}", ex.getMessage());
-
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiError(
@@ -93,13 +85,10 @@ public class CommonControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         log.warn("Validation failed: {}", ex.getMessage());
-
         Map<String, String> errors = new HashMap<>();
-
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-
         ApiError apiError = new ApiError(
                 400,
                 "BAD_REQUEST",
@@ -108,7 +97,6 @@ public class CommonControllerAdvice {
                 LocalDateTime.now(),
                 errors
         );
-
         return ResponseEntity.badRequest()
                 .body(apiError);
     }

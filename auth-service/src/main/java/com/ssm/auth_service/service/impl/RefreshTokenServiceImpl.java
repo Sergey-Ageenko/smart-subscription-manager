@@ -27,44 +27,33 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public String create(@NotNull JwtUserPrincipal principal) {
-
         String userId = principal.getUserId().toString();
-
         String oldToken = redisTemplate.opsForValue()
                 .get(ApiConstants.PREFIX_USER_REFRESH + userId);
-
         if (oldToken != null) {
             redisTemplate.delete(ApiConstants.PREFIX_REFRESH + oldToken);
         }
-
         String token = UUID.randomUUID().toString();
-
         redisTemplate.opsForValue().set(
                 ApiConstants.PREFIX_REFRESH + token,
                 userId,
                 Duration.ofMillis(refreshTokenExpiration)
         );
-
         redisTemplate.opsForValue().set(
                 ApiConstants.PREFIX_USER_REFRESH + userId,
                 token,
                 Duration.ofMillis(refreshTokenExpiration)
         );
-
         return token;
     }
 
     @Override
     public UUID validate(String refreshToken) {
-
         String userId = redisTemplate.opsForValue()
                 .get(ApiConstants.PREFIX_REFRESH + refreshToken);
-
-
         if (userId == null) {
             throw new UnauthorizedException(ApiErrorMessage.TOKEN_EXPIRED.getMessage());
         }
-
         return UUID.fromString(userId);
     }
 

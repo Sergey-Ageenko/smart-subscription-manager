@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 public class ApiConstants {
     public static final String USER_ROLES = "userRoles";
     public static final String JWT_ERROR = "jwt-error";
-    public static final String USER_REGISTERED_TOPIC = "user-registered-topic";
+    public static final String USER_REGISTERED = "user-registered";
 }

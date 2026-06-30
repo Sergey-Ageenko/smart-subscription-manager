@@ -30,7 +30,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException ex, HttpServletRequest request) {
         log.warn("NotFound: {}", ex.getMessage());
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(
                         404,
@@ -45,7 +44,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(DataExistException.class)
     public ResponseEntity<ApiError> handleDataExistException(DataExistException ex, HttpServletRequest request) {
         log.warn("Conflict: {}", ex.getMessage());
-
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ApiError(
@@ -61,7 +59,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<ApiError> handleInvalidDataException(InvalidDataException ex, HttpServletRequest request) {
         log.warn("Bad request: {}", ex.getMessage());
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError(
@@ -77,7 +74,6 @@ public class CommonControllerAdvice {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException ex, HttpServletRequest request) {
         log.warn("Unauthorized: {}", ex.getMessage());
-
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiError(
@@ -96,22 +92,15 @@ public class CommonControllerAdvice {
             HttpServletRequest request
     ) {
         log.warn("Invalid request body: {}", ex.getMessage());
-
         String message = ApiErrorMessage.INVALID_REQUEST_BODY.getMessage();
-
         Throwable cause = ex.getCause();
-
         if (cause instanceof InvalidFormatException invalidFormatException) {
-
             String field = invalidFormatException.getPath().stream()
                     .findFirst()
                     .map(JsonMappingException.Reference::getFieldName)
                     .orElse("unknown");
-
             if (invalidFormatException.getTargetType().isEnum()) {
-
                 Object[] values = invalidFormatException.getTargetType().getEnumConstants();
-
                 message = String.format(
                         ApiErrorMessage.INVALID_ENUM_CONSTANTS.getMessage(
                                 invalidFormatException.getValue(),
@@ -120,7 +109,6 @@ public class CommonControllerAdvice {
                 );
             }
         }
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError(
@@ -135,15 +123,11 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentException(MethodArgumentNotValidException ex, HttpServletRequest request) {
-
         log.warn("Validation failed: {}", ex.getMessage());
-
         Map<String, String> errors = new HashMap<>();
-
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-
         ApiError apiError = new ApiError(
                 400,
                 "BAD_REQUEST",
@@ -152,7 +136,6 @@ public class CommonControllerAdvice {
                 LocalDateTime.now(),
                 errors
         );
-
         return ResponseEntity.badRequest()
                 .body(apiError);
     }

@@ -25,12 +25,10 @@ public class BudgetServiceImpl implements BudgetService {
     @Override
     @Transactional(readOnly = true)
     public CoreResponse<BudgetResponse> getBudget(UUID profileId) {
-
         Budget budget = budgetRepository.findByProfile_Id(profileId)
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_BUDGET_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
-
         return CoreResponse.createSuccessful(
                 toResponse(budget)
         );
@@ -39,23 +37,18 @@ public class BudgetServiceImpl implements BudgetService {
     @Override
     @Transactional
     public CoreResponse<BudgetResponse> updateBudget(UUID profileId, BudgetUpdateRequest request) {
-
         Budget budget = budgetRepository.findByProfile_Id(profileId)
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_BUDGET_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
-
         budget.setMonthlyLimit(request.newMonthlyLimit());
-
         log.info("Budget {} updated successfully.", budget.getId());
-
         return CoreResponse.createSuccessful(
                 toResponse(budget)
         );
     }
 
     private BudgetResponse toResponse(Budget budget){
-
         return new BudgetResponse(
                 budget.getMonthlyLimit()
         );

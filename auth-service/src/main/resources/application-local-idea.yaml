@@ -36,6 +36,12 @@ jwt:
   access-token-expiration: 900000   # 15min
   refresh-token-expiration: 604800000 # 7d
 
+
+app:
+  outbox:
+    poll-interval-ms: 5000
+
+
 server:
   port: 8189
 

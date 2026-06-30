@@ -13,5 +13,5 @@ public class ApiConstants {
     public static final String AUDIENCE = "core-service";
     public static final String REFRESH_TOKEN = "refresh-token";
     public static final String JWT_ERROR = "jwt-error";
-    public static final String USER_REGISTERED_TOPIC = "user-registered-topic";
+    public static final String USER_REGISTERED = "user-registered";
 }

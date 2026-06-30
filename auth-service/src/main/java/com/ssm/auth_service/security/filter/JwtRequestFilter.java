@@ -39,16 +39,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
-
         String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String token = authHeader.substring(BEARER_PREFIX.length());
-
         try {
             String userId = jwtTokenProvider.extractUserId(token);
             if (StringUtils.isNotEmpty(userId) && SecurityContextHolder
@@ -63,7 +59,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-
             }
         } catch (JwtException ex) {
             SecurityContextHolder.clearContext();

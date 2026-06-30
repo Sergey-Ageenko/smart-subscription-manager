@@ -11,21 +11,14 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, String> template =
-                new RedisTemplate<>();
-
+        RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
-
-        StringRedisSerializer serializer =
-                new StringRedisSerializer();
-
+        StringRedisSerializer serializer = new StringRedisSerializer();
         template.setKeySerializer(serializer);
         template.setValueSerializer(serializer);
         template.setHashKeySerializer(serializer);
         template.setHashValueSerializer(serializer);
-
         template.afterPropertiesSet();
-
         return template;
     }
 }

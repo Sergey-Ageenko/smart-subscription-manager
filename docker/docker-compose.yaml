@@ -20,6 +20,7 @@ services:
       JWT_SECRET: TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw==
       JWT_ACCESS_TOKEN_EXPIRATION: 900000
       JWT_REFRESH_TOKEN_EXPIRATION: 604800000
+      POLL_INTERVAL_MS: 5000
     depends_on:
       - postgres
       - redis

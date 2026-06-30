@@ -24,7 +24,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
         ApiError apiError = new ApiError(
                 403,
                 "FORBIDDEN",
@@ -33,7 +32,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 LocalDateTime.now(),
                 null
         );
-
         response.getWriter().write(
                 objectMapper.writeValueAsString(apiError)
         );

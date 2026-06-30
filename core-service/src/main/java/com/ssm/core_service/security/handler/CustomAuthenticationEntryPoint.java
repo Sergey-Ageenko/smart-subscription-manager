@@ -27,13 +27,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
         Object attr = request.getAttribute(ApiConstants.JWT_ERROR);
-
         String message = (attr != null)
                 ? attr.toString()
                 : authException.getMessage();
-
         ApiError apiError = new ApiError(
                 401,
                 "UNAUTHORIZED",
@@ -42,7 +39,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 LocalDateTime.now(),
                 null
         );
-
         response.getWriter().write(
                 objectMapper.writeValueAsString(apiError)
         );

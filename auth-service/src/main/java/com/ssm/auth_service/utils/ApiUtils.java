@@ -8,7 +8,6 @@ import java.time.Duration;
 public class ApiUtils {
 
     public static ResponseCookie getCookieWithRefreshToken (String refreshToken){
-
         return ResponseCookie.from(
                         ApiConstants.REFRESH_TOKEN,
                         refreshToken)
