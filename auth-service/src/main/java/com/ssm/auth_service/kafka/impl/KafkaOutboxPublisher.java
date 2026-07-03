@@ -4,13 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.auth_service.kafka.OutboxPublisher;
 import com.ssm.auth_service.model.constants.ApiConstants;
 import com.ssm.auth_service.model.entities.OutboxEvent;
-import events.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class KafkaOutboxPublisher implements OutboxPublisher {
 
@@ -26,7 +28,13 @@ public class KafkaOutboxPublisher implements OutboxPublisher {
                     ApiConstants.USER_REGISTERED,
                     payload.userId().toString(),
                     payload
-            ).get();
+            ).whenComplete((result, ex) -> {
+                if (ex != null) {
+                    log.error("Kafka publish failed eventId={}", payload.eventId(), ex);
+                } else {
+                    log.debug("Kafka publish success eventId={}", payload.eventId());
+                }
+            });
         } catch (Exception e) {
             throw new IllegalStateException("Kafka publish failed", e);
         }

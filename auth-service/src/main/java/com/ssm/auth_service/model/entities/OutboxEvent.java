@@ -32,6 +32,9 @@ public class OutboxEvent {
     @Column(nullable = false)
     private OutboxStatus status;
 
+    @Column(name = "retry_count")
+    private int retryCount;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

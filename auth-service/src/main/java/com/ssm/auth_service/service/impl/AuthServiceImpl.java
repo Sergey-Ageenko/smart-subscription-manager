@@ -2,7 +2,6 @@ package com.ssm.auth_service.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.ssm.auth_service.model.constants.ApiConstants;
 import com.ssm.auth_service.model.constants.ApiErrorMessage;
 import com.ssm.auth_service.model.entities.OutboxEvent;
@@ -23,7 +22,7 @@ import com.ssm.auth_service.security.JwtTokenProvider;
 import com.ssm.auth_service.security.JwtUserPrincipal;
 import com.ssm.auth_service.service.AuthService;
 import com.ssm.auth_service.service.RefreshTokenService;
-import events.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -15,11 +15,11 @@ public class RegisterRequest {
     @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @Size(min = 2, max = 255, message = "The firstname length must be no more than 255 characters.")
+    @Size(min = 2, max = 30, message = "The firstname length must be no more than 255 characters.")
     @NotBlank(message = "Firstname cannot be empty")
     private String firstName;
 
-    @Size(min = 2, max = 255, message = "The lastname length must be no more than 255 characters.")
+    @Size(min = 2, max = 80, message = "The lastname length must be no more than 255 characters.")
     @NotBlank(message = "Lastname cannot be empty")
     private String lastName;
 }
