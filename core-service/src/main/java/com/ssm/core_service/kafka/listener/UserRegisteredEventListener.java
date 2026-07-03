@@ -1,13 +1,20 @@
 package com.ssm.core_service.kafka.listener;
 
+import com.ssm.core_service.exception.DuplicateEventException;
+import com.ssm.core_service.exception.RetryableException;
 import com.ssm.core_service.model.constants.ApiConstants;
+import com.ssm.core_service.model.entity.ProcessedEvent;
+import com.ssm.core_service.service.ProcessedEventService;
 import com.ssm.core_service.service.ProfileService;
-import events.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+
 
 @Slf4j
 @Service
@@ -15,21 +22,33 @@ import org.springframework.stereotype.Service;
 public class UserRegisteredEventListener {
 
     private final ProfileService profileService;
+    private final ProcessedEventService processedEventService;
 
     @KafkaListener(
             topics = ApiConstants.USER_REGISTERED,
             groupId = "core-group"
     )
     public void handle(ConsumerRecord<String, UserRegisteredEvent> record) {
+        log.debug("Received message - eventId: {} - key: {} - payload: {}",
+                record.value().eventId(),
+                record.key(),
+                record.value()
+        );
         try {
-            log.info("RECEIVED key={}, offset={}",
-                    record.key(),
-                    record.offset()
-            );
-            profileService.createProfile(record.value());
+            UserRegisteredEvent event = record.value();
+            processedEventService.process(ProcessedEvent.builder()
+                    .eventId(event.eventId())
+                    .processedAt(LocalDateTime.now())
+                    .build());
+            profileService.createProfile(event);
+        } catch (DuplicateEventException e) {
+            log.debug("Duplicate message received: {}", e.getMessage());
         } catch (Exception e) {
-            log.error("Processing failed offset={}", record.offset(), e);
-            throw e;
+            if (e instanceof RetryableException) {
+                log.debug("Throwing retryable exception.");
+                throw e;
+            }
+            log.error("Error processing message: {}", e.getMessage());
         }
     }
 }

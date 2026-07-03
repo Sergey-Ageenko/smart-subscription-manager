@@ -29,10 +29,12 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
 
       properties:
-        spring.json.trusted.packages: "*"
+        spring.json.trusted.packages: "com.ssm.events"
 
 jwt:
   secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
+  issuer: "auth-service"
+  audience: "core-service"
 
 logging:
   level:

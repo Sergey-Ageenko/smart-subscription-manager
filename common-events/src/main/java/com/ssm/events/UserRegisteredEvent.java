@@ -1,4 +1,4 @@
-package events;
+package com.ssm.events;
 
 import java.io.Serializable;
 import java.util.UUID;

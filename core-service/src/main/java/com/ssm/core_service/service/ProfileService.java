@@ -3,7 +3,7 @@ package com.ssm.core_service.service;
 import com.ssm.core_service.model.request.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
-import events.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;

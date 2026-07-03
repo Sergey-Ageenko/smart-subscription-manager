@@ -15,8 +15,8 @@ public enum ApiErrorMessage {
     INVALID_REQUEST_BODY("Invalid request body"),
     INVALID_ENUM_CONSTANTS("Invalid value '%s' for field '%s'. Allowed values: %s"),
     VALIDATION_FAILED("Validation failed"),
-    SUBSCRIPTION_IS_ALREADY_EXISTS("Subscription with name: '%s' already exists");
-
+    SUBSCRIPTION_IS_ALREADY_EXISTS("Subscription with name: '%s' already exists"),
+    EVENT_IS_ALREADY_EXISTS ("Event with id: '%s' already exists");
     private final String message;
 
     public String getMessage(Object... args){

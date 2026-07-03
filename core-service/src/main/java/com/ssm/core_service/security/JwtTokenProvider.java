@@ -17,15 +17,23 @@ import java.util.*;
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
+    private final String expectedIssuer;
+    private final String expectedAudience;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey
-    ) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
+                            @Value("${jwt.issuer}") String expectedIssuer,
+                            @Value("${jwt.audience}") String expectedAudience
+                            ) {
         this.secretKey = createSecretKey(secretKey);
+        this.expectedIssuer = expectedIssuer;
+        this.expectedAudience = expectedAudience;
     }
 
     public Claims parse(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
+                .requireIssuer(expectedIssuer)
+                .requireAudience(expectedAudience)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

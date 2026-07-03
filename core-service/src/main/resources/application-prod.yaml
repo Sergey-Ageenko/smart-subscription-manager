@@ -14,7 +14,7 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
 
       properties:
-        spring.json.trusted.packages: "*"
+        spring.json.trusted.packages: "com.ssm.events"
 
   jpa:
     properties:
@@ -27,6 +27,8 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER}
+  audience: ${JWT_AUDIENCE}
 
 logging:
   level:

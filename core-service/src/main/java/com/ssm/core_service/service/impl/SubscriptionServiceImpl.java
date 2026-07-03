@@ -91,10 +91,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         if (request.price() != null && request.price().compareTo(BigDecimal.ZERO) > 0) {
             subscription.setPrice(request.price());
         }
-        if (StringUtils.hasText(String.valueOf(request.category()))) {
+        if (request.category() != null) {
             subscription.setCategory(request.category());
         }
-        if (StringUtils.hasText(String.valueOf(request.billingPeriod()))) {
+        if (request.billingPeriod() != null) {
             subscription.setBillingPeriod(request.billingPeriod());
             subscription.setNextPaymentDate(calculateNextPaymentDate(LocalDate.now(), request.billingPeriod()));
         }

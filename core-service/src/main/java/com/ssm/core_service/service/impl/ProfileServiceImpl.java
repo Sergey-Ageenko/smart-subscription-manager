@@ -11,7 +11,7 @@ import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.repository.BudgetRepository;
 import com.ssm.core_service.repository.ProfileRepository;
 import com.ssm.core_service.service.ProfileService;
-import events.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
