@@ -1,4 +1,4 @@
-package com.ssm.core_service.model.constants;
+package com.ssm.core_service.model.constant;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

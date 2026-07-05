@@ -1,7 +1,7 @@
 package com.ssm.auth_service.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssm.auth_service.model.constants.ApiConstants;
+import com.ssm.auth_service.model.constant.ApiConstants;
 import com.ssm.auth_service.model.request.LoginRequest;
 import com.ssm.auth_service.model.request.RegisterRequest;
 import com.ssm.auth_service.model.response.AuthResponse;

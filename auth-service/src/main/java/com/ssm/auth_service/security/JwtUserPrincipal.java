@@ -1,6 +1,6 @@
 package com.ssm.auth_service.security;
 
-import com.ssm.auth_service.model.entities.User;
+import com.ssm.auth_service.model.entity.User;
 import com.ssm.auth_service.model.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

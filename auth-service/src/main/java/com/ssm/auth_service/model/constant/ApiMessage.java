@@ -1,4 +1,4 @@
-package com.ssm.auth_service.model.constants;
+package com.ssm.auth_service.model.constant;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

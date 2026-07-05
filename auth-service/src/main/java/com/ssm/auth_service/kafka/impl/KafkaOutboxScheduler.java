@@ -2,10 +2,11 @@ package com.ssm.auth_service.kafka.impl;
 
 import com.ssm.auth_service.kafka.OutboxPublisher;
 import com.ssm.auth_service.kafka.OutboxScheduler;
-import com.ssm.auth_service.model.entities.OutboxEvent;
+import com.ssm.auth_service.model.entity.OutboxEvent;
 import com.ssm.auth_service.service.OutboxService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!test")
 @Slf4j
 public class KafkaOutboxScheduler implements OutboxScheduler {
 
@@ -28,7 +30,6 @@ public class KafkaOutboxScheduler implements OutboxScheduler {
         }
         for (OutboxEvent event : events) {
             try {
-                outboxService.markProcessing(event);
                 outboxPublisher.publish(event);
                 outboxService.markSent(event);
             } catch (Exception e) {

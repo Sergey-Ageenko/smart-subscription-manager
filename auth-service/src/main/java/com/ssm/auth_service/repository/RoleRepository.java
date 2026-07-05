@@ -1,6 +1,6 @@
-package com.ssm.auth_service.repositories;
+package com.ssm.auth_service.repository;
 
-import com.ssm.auth_service.model.entities.Role;
+import com.ssm.auth_service.model.entity.Role;
 import com.ssm.auth_service.model.enums.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 

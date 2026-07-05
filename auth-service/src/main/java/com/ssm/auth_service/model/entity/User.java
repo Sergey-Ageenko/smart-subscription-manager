@@ -1,4 +1,4 @@
-package com.ssm.auth_service.model.entities;
+package com.ssm.auth_service.model.entity;
 
 import com.ssm.auth_service.model.enums.UserStatus;
 import jakarta.persistence.*;
@@ -31,7 +31,7 @@ public class User {
     private String password;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)

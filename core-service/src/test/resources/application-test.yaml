@@ -1,0 +1,33 @@
+spring:
+
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: core_service
+
+  flyway:
+    enabled: false
+
+jwt:
+  secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
+  issuer: "auth-service"
+  audience: "core-service"
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

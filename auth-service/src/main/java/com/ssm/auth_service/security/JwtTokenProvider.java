@@ -1,6 +1,6 @@
 package com.ssm.auth_service.security;
 
-import com.ssm.auth_service.model.constants.ApiConstants;
+import com.ssm.auth_service.model.constant.ApiConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS outbox_events
 (
     id           UUID PRIMARY KEY,
     event_name   VARCHAR(100) NOT NULL,
+    event_id     UUID         NOT NULL UNIQUE,
     payload      VARCHAR      NOT NULL,
     status       VARCHAR(20)  NOT NULL,
     retry_count  NUMERIC      DEFAULT 0,

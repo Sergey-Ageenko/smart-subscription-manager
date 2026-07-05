@@ -1,8 +1,8 @@
 package com.ssm.core_service.security.filter;
 
 
-import com.ssm.core_service.model.constants.ApiErrorMessage;
-import com.ssm.core_service.model.constants.ApiConstants;
+import com.ssm.core_service.model.constant.ApiErrorMessage;
+import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.security.JwtTokenProvider;
 import com.ssm.core_service.security.JwtUserPrincipal;
 import io.jsonwebtoken.Claims;

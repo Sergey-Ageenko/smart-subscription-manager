@@ -1,6 +1,6 @@
 package com.ssm.auth_service.model.response;
 
-import com.ssm.auth_service.model.constants.ApiMessage;
+import com.ssm.auth_service.model.constant.ApiMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

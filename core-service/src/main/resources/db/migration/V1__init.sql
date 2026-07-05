@@ -24,7 +24,7 @@ CREATE TABLE budgets
 CREATE TABLE subscriptions
 (
     id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name              VARCHAR(100)   NOT NULL UNIQUE ,
+    name              VARCHAR(100)   NOT NULL,
     price             NUMERIC(10, 2) NOT NULL,
     category          VARCHAR(50)    NOT NULL,
     billing_period    VARCHAR(30)    NOT NULL,
@@ -42,3 +42,18 @@ CREATE TABLE processed_events(
     event_id UUID PRIMARY KEY,
     processed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS outbox_events
+(
+    id           UUID PRIMARY KEY,
+    event_name   VARCHAR(100) NOT NULL,
+    event_id     UUID         NOT NULL UNIQUE,
+    payload      VARCHAR      NOT NULL,
+    status       VARCHAR(20)  NOT NULL,
+    retry_count  NUMERIC      DEFAULT 0,
+    created_at   TIMESTAMP    NOT NULL,
+    sent_at      TIMESTAMP
+    );
+
+CREATE INDEX idx_outbox_status_created
+    ON outbox_events(status, created_at);

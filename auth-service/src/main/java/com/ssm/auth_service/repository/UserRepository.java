@@ -1,6 +1,6 @@
-package com.ssm.auth_service.repositories;
+package com.ssm.auth_service.repository;
 
-import com.ssm.auth_service.model.entities.User;
+import com.ssm.auth_service.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -23,7 +23,7 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)

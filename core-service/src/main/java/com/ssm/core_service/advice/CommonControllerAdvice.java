@@ -6,7 +6,7 @@ import com.ssm.core_service.exception.DataExistException;
 import com.ssm.core_service.exception.InvalidDataException;
 import com.ssm.core_service.exception.NotFoundException;
 import com.ssm.core_service.exception.UnauthorizedException;
-import com.ssm.core_service.model.constants.ApiErrorMessage;
+import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.utils.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

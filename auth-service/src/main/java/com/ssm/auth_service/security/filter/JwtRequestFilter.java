@@ -1,7 +1,7 @@
 package com.ssm.auth_service.security.filter;
 
-import com.ssm.auth_service.model.constants.ApiErrorMessage;
-import com.ssm.auth_service.model.constants.ApiConstants;
+import com.ssm.auth_service.model.constant.ApiErrorMessage;
+import com.ssm.auth_service.model.constant.ApiConstants;
 import com.ssm.auth_service.security.JwtTokenProvider;
 import com.ssm.auth_service.security.JwtUserPrincipal;
 import com.ssm.auth_service.service.UserService;

@@ -1,5 +1,6 @@
 package com.ssm.core_service.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssm.core_service.model.request.NewSubscriptionRequest;
 import com.ssm.core_service.model.request.SubscriptionUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
@@ -39,7 +40,7 @@ public class SubscriptionController {
 
     @PostMapping
     public ResponseEntity<CoreResponse<SubscriptionResponse>> createSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
-                                                                                 @Valid @RequestBody NewSubscriptionRequest request){
+                                                                                 @Valid @RequestBody NewSubscriptionRequest request) throws JsonProcessingException {
         return ResponseEntity.ok()
                 .body(subscriptionService.createSubscription(principal.userId(), request));
     }
@@ -47,14 +48,14 @@ public class SubscriptionController {
     @PatchMapping("/{subscriptionId}/update")
     public ResponseEntity<CoreResponse<SubscriptionResponse>> updateSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
                                                                                  @PathVariable UUID subscriptionId,
-                                                                                 @Valid @RequestBody SubscriptionUpdateRequest request){
+                                                                                 @Valid @RequestBody SubscriptionUpdateRequest request) throws JsonProcessingException {
         return ResponseEntity.ok()
                 .body(subscriptionService.updateSubscription(principal.userId(), subscriptionId, request));
     }
 
     @PatchMapping("/{subscriptionId}/cancel")
     public ResponseEntity<CoreResponse<SubscriptionResponse>> cancelSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
-                                                                                 @PathVariable UUID subscriptionId){
+                                                                                 @PathVariable UUID subscriptionId) throws JsonProcessingException {
         return ResponseEntity.ok()
                 .body(subscriptionService.cancelSubscription(principal.userId(), subscriptionId));
     }

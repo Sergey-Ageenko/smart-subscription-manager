@@ -1,4 +1,4 @@
-package com.ssm.auth_service.model.entities;
+package com.ssm.auth_service.model.entity;
 
 import com.ssm.auth_service.model.enums.RoleType;
 import jakarta.persistence.*;

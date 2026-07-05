@@ -1,4 +1,4 @@
-package com.ssm.auth_service.model.exception;
+package com.ssm.auth_service.exception;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

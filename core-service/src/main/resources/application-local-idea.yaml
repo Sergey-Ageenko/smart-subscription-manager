@@ -22,6 +22,9 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: core-service
       auto-offset-reset: earliest
@@ -35,6 +38,10 @@ jwt:
   secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
   issuer: "auth-service"
   audience: "core-service"
+
+app:
+  outbox:
+    poll-interval-ms: 5000
 
 logging:
   level:

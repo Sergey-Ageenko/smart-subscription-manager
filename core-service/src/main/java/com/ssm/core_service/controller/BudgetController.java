@@ -1,5 +1,6 @@
 package com.ssm.core_service.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssm.core_service.model.request.BudgetUpdateRequest;
 import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
@@ -27,7 +28,7 @@ public class BudgetController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal JwtUserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request){
+    public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal JwtUserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request) throws JsonProcessingException {
         return ResponseEntity.ok()
                 .body(budgetService.updateBudget(principal.userId(), request));
     }

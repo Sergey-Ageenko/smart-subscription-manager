@@ -2,7 +2,7 @@ package com.ssm.core_service.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssm.core_service.model.constants.ApiConstants;
+import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.utils.ApiError;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

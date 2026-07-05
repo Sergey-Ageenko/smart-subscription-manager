@@ -1,9 +1,9 @@
 package com.ssm.auth_service.service.impl;
 
-import com.ssm.auth_service.model.constants.ApiErrorMessage;
-import com.ssm.auth_service.model.entities.User;
-import com.ssm.auth_service.model.exception.NotFoundException;
-import com.ssm.auth_service.repositories.UserRepository;
+import com.ssm.auth_service.model.constant.ApiErrorMessage;
+import com.ssm.auth_service.model.entity.User;
+import com.ssm.auth_service.exception.NotFoundException;
+import com.ssm.auth_service.repository.UserRepository;
 import com.ssm.auth_service.security.JwtUserPrincipal;
 import com.ssm.auth_service.service.UserService;
 import lombok.RequiredArgsConstructor;

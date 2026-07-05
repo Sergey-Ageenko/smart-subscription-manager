@@ -2,22 +2,22 @@ package com.ssm.auth_service.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssm.auth_service.model.constants.ApiConstants;
-import com.ssm.auth_service.model.constants.ApiErrorMessage;
-import com.ssm.auth_service.model.entities.OutboxEvent;
-import com.ssm.auth_service.model.entities.Role;
-import com.ssm.auth_service.model.entities.User;
+import com.ssm.auth_service.model.constant.ApiConstants;
+import com.ssm.auth_service.model.constant.ApiErrorMessage;
+import com.ssm.auth_service.model.entity.OutboxEvent;
+import com.ssm.auth_service.model.entity.Role;
+import com.ssm.auth_service.model.entity.User;
 import com.ssm.auth_service.model.enums.OutboxStatus;
 import com.ssm.auth_service.model.enums.UserStatus;
-import com.ssm.auth_service.model.exception.DataExistException;
-import com.ssm.auth_service.model.exception.InvalidDataException;
-import com.ssm.auth_service.model.exception.NotFoundException;
+import com.ssm.auth_service.exception.DataExistException;
+import com.ssm.auth_service.exception.InvalidDataException;
+import com.ssm.auth_service.exception.NotFoundException;
 import com.ssm.auth_service.model.request.LoginRequest;
 import com.ssm.auth_service.model.request.RegisterRequest;
 import com.ssm.auth_service.model.response.TokenResponse;
-import com.ssm.auth_service.repositories.OutboxRepository;
-import com.ssm.auth_service.repositories.RoleRepository;
-import com.ssm.auth_service.repositories.UserRepository;
+import com.ssm.auth_service.repository.OutboxRepository;
+import com.ssm.auth_service.repository.RoleRepository;
+import com.ssm.auth_service.repository.UserRepository;
 import com.ssm.auth_service.security.JwtTokenProvider;
 import com.ssm.auth_service.security.JwtUserPrincipal;
 import com.ssm.auth_service.service.AuthService;
@@ -101,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
                 );
         OutboxEvent outboxEvent = OutboxEvent.builder()
                 .eventName(ApiConstants.USER_REGISTERED)
+                .eventId(event.eventId())
                 .payload(objectMapper.writeValueAsString(event))
                 .status(OutboxStatus.NEW)
                 .createdAt(LocalDateTime.now())

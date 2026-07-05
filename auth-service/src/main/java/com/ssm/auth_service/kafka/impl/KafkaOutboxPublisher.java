@@ -2,8 +2,8 @@ package com.ssm.auth_service.kafka.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.auth_service.kafka.OutboxPublisher;
-import com.ssm.auth_service.model.constants.ApiConstants;
-import com.ssm.auth_service.model.entities.OutboxEvent;
+import com.ssm.auth_service.model.constant.ApiConstants;
+import com.ssm.auth_service.model.entity.OutboxEvent;
 import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,23 +16,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KafkaOutboxPublisher implements OutboxPublisher {
 
-    private final KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate;
-    private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public void publish(OutboxEvent event) {
         try {
-            UserRegisteredEvent payload =
-                    objectMapper.readValue(event.getPayload(), UserRegisteredEvent.class);
             kafkaTemplate.send(
-                    ApiConstants.USER_REGISTERED,
-                    payload.userId().toString(),
-                    payload
+                    event.getEventName(),
+                    event.getEventId().toString(),
+                    event.getPayload()
             ).whenComplete((result, ex) -> {
                 if (ex != null) {
-                    log.error("Kafka publish failed eventId={}", payload.eventId(), ex);
+                    log.error("Kafka publish failed eventId={}", event.getEventId(), ex);
                 } else {
-                    log.debug("Kafka publish success eventId={}", payload.eventId());
+                    log.debug("Kafka publish success eventId={}", event.getEventId());
                 }
             });
         } catch (Exception e) {

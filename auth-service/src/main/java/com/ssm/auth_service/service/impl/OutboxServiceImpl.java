@@ -1,8 +1,8 @@
 package com.ssm.auth_service.service.impl;
 
-import com.ssm.auth_service.model.entities.OutboxEvent;
+import com.ssm.auth_service.model.entity.OutboxEvent;
 import com.ssm.auth_service.model.enums.OutboxStatus;
-import com.ssm.auth_service.repositories.OutboxRepository;
+import com.ssm.auth_service.repository.OutboxRepository;
 import com.ssm.auth_service.service.OutboxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,6 @@ public class OutboxServiceImpl implements OutboxService {
     public void markSent(OutboxEvent event) {
         event.setSentAt(LocalDateTime.now());
         event.setStatus(OutboxStatus.SENT);
-        outboxRepository.save(event);
-    }
-
-    @Override
-    @Transactional
-    public void markProcessing(OutboxEvent event) {
-        event.setStatus(OutboxStatus.PROCESSING);
         outboxRepository.save(event);
     }
 

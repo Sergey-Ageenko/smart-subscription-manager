@@ -1,6 +1,6 @@
 package com.ssm.auth_service.utils;
 
-import com.ssm.auth_service.model.constants.ApiConstants;
+import com.ssm.auth_service.model.constant.ApiConstants;
 import org.springframework.http.ResponseCookie;
 
 import java.time.Duration;

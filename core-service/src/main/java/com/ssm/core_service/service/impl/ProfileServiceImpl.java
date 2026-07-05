@@ -2,7 +2,7 @@ package com.ssm.core_service.service.impl;
 
 import com.ssm.core_service.exception.DataExistException;
 import com.ssm.core_service.exception.NotFoundException;
-import com.ssm.core_service.model.constants.ApiErrorMessage;
+import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
 import com.ssm.core_service.model.entity.Profile;
 import com.ssm.core_service.model.request.ProfileUpdateRequest;

@@ -1,8 +1,6 @@
-package com.ssm.auth_service.model.entities;
+package com.ssm.auth_service.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.ssm.auth_service.model.enums.OutboxStatus;
-import io.lettuce.core.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +23,9 @@ public class OutboxEvent {
     @Column(name = "event_name", nullable = false, updatable = false)
     private String eventName;
 
+    @Column(name = "event_id", nullable = false, updatable = false, unique = true)
+    private UUID eventId;
+
     @Column(nullable = false)
     private String payload;
 
@@ -38,6 +39,6 @@ public class OutboxEvent {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "sent_at", updatable = false)
+    @Column(name = "sent_at")
     private LocalDateTime sentAt;
 }
