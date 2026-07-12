@@ -12,7 +12,7 @@ public enum ApiErrorMessage {
     INVALID_TOKEN("Token is invalid"),
     USER_BUDGET_NOT_FOUND_BY_ID("User's budget with id: '%s' was not found"),
     USER_SUBSCRIPTION_NOT_FOUND_BY_ID("User's subscription with id: '%s' was not found"),
-    USER_SUBSCRIPTION_IS_ALREADY_EXISTS("User's subscription with name: '%s' already exists"),
+    USER_SUBSCRIPTION_IS_ALREADY_EXISTS("User's subscription with id: '%s' already exists"),
     INVALID_REQUEST_BODY("Invalid request body"),
     INVALID_ENUM_CONSTANTS("Invalid value '%s' for field '%s'. Allowed values: '%s'"),
     VALIDATION_FAILED("Validation failed"),

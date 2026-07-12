@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public record SubscriptionCancelledEvent(
-        UUID eventId,
         UUID subscriptionId,
         String status) implements Serializable {
 }

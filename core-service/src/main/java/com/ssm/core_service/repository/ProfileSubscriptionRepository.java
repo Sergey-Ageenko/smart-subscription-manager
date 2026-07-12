@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ProfileSubscriptionRepository extends JpaRepository<ProfileSubscription, ProfileSubscriptionId> {
     List<ProfileSubscription> findAllById_ProfileId(UUID idProfileId);
     Optional<ProfileSubscription> findById_ProfileIdAndSubscriptionId(UUID idProfileId, UUID idSubscriptionId);
+
+    boolean existsById_SubscriptionId(UUID idSubscriptionId);
 }

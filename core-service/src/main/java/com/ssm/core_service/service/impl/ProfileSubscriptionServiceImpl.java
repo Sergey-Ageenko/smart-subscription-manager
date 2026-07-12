@@ -1,10 +1,11 @@
 package com.ssm.core_service.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.core_service.exception.DataExistException;
 import com.ssm.core_service.exception.InvalidDataException;
 import com.ssm.core_service.exception.NotFoundException;
+import com.ssm.core_service.factory.SubscriptionEventFactory;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
+import com.ssm.core_service.model.entity.OutboxEvent;
 import com.ssm.core_service.model.entity.Profile;
 import com.ssm.core_service.model.entity.Subscription;
 import com.ssm.core_service.model.entity.profileSubscription.ProfileSubscription;
@@ -38,7 +39,7 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
     private final ProfileSubscriptionRepository profileSubscriptionRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final ProfileRepository profileRepository;
-    private final ObjectMapper objectMapper;
+    private final SubscriptionEventFactory subscriptionEventFactory;
     private final OutboxRepository outboxRepository;
 
     @Override
@@ -70,6 +71,9 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
     @Override
     @Transactional
     public CoreResponse<ProfileSubscriptionResponse> addSubscription(UUID profileId, UUID subId, ProfileSubscriptionAddRequest request) {
+        if (profileSubscriptionRepository.existsById_SubscriptionId(subId)){
+            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_EXISTS.getMessage(subId));
+        }
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
@@ -83,6 +87,8 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
                         request.price(),
                         request.billingPeriod())
         );
+        OutboxEvent event = subscriptionEventFactory.created(savedProfileSubscription);
+        outboxRepository.save(event);
         log.info("Subscription {} added successfully to profile {}.",
                 savedProfileSubscription.getSubscription().getId(),
                 savedProfileSubscription.getProfile().getId());
@@ -96,13 +102,20 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
+        boolean financialDataChanged = false;
         if (request.price() != null && request.price().compareTo(BigDecimal.ZERO) > 0 &&
                 request.price().compareTo(updatedProfileSubscription.getPrice()) != 0) {
             updatedProfileSubscription.setPrice(request.price());
+            financialDataChanged = true;
         }
         if (request.billingPeriod() != null) {
             updatedProfileSubscription.setBillingPeriod(request.billingPeriod());
             updatedProfileSubscription.setNextPaymentDate(calculateNextPaymentDate(LocalDate.now(), request.billingPeriod()));
+            financialDataChanged = true;
+        }
+        if (financialDataChanged){
+            OutboxEvent event = subscriptionEventFactory.updated(updatedProfileSubscription);
+            outboxRepository.save(event);
         }
         log.info("Subscription {} updated successfully from profile {}.",
                 updatedProfileSubscription.getSubscription().getId(),
@@ -118,9 +131,11 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
                         ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
         if (cancelledProfileSubscription.getStatus() != SubscriptionStatus.ACTIVE) {
-            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_CANCELLED.getMessage());
+            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_CANCELLED.getMessage(subId));
         }
         cancelledProfileSubscription.setStatus(SubscriptionStatus.CANCELLED);
+        OutboxEvent event = subscriptionEventFactory.cancelled(cancelledProfileSubscription);
+        outboxRepository.save(event);
         log.info("Subscription {} cancelled successfully from profile {}.",
                 cancelledProfileSubscription.getSubscription().getId(),
                 cancelledProfileSubscription.getProfile().getId());
