@@ -5,7 +5,7 @@ import com.ssm.core_service.exception.NotFoundException;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
 import com.ssm.core_service.model.entity.Profile;
-import com.ssm.core_service.model.request.ProfileUpdateRequest;
+import com.ssm.core_service.model.request.userRequest.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.repository.BudgetRepository;

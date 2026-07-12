@@ -9,6 +9,5 @@ public record SubscriptionUpdatedEvent(
         UUID eventId,
         UUID subscriptionId,
         BigDecimal price,
-        String billingPeriod,
-        LocalDate nextPaymentDate) implements Serializable {
+        String billingPeriod) implements Serializable {
 }

@@ -23,19 +23,20 @@ CREATE TABLE budgets
 
 CREATE TABLE subscriptions
 (
-    id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name              VARCHAR(100)   NOT NULL,
-    price             NUMERIC(10, 2) NOT NULL,
-    category          VARCHAR(50)    NOT NULL,
-    billing_period    VARCHAR(30)    NOT NULL,
-    status            VARCHAR(30)    NOT NULL,
-    next_payment_date DATE           NOT NULL,
-    profile_id            UUID           NOT NULL,
+    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name              VARCHAR(100)   NOT NULL UNIQUE ,
+    category          VARCHAR(50)    NOT NULL
+);
 
-    CONSTRAINT fk_subscription_profile
-        FOREIGN KEY (profile_id)
-            REFERENCES profiles (id)
-            ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS profile_subscriptions
+(
+    profile_id UUID REFERENCES profiles (id) ON DELETE CASCADE,
+    subscription_id UUID REFERENCES subscriptions (id) ON DELETE CASCADE,
+    price             NUMERIC(10, 2) NOT NULL,
+    status            VARCHAR(30)    NOT NULL,
+    billing_period    VARCHAR(30)    NOT NULL,
+    next_payment_date DATE           NOT NULL,
+    PRIMARY KEY (profile_id, subscription_id)
 );
 
 CREATE TABLE processed_events(

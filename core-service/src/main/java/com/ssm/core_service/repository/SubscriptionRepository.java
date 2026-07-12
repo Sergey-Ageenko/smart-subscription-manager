@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, UUID> {
-    List<Subscription> findAllByProfile_Id(UUID profileId);
-    Optional<Subscription> findByIdAndProfile_Id(UUID subId, UUID profileId);
+
     boolean existsByName(String name);
 }

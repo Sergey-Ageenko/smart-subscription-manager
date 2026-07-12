@@ -8,7 +8,7 @@ import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
 import com.ssm.core_service.model.entity.OutboxEvent;
 import com.ssm.core_service.model.enums.OutboxStatus;
-import com.ssm.core_service.model.request.BudgetUpdateRequest;
+import com.ssm.core_service.model.request.userRequest.BudgetUpdateRequest;
 import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.repository.BudgetRepository;

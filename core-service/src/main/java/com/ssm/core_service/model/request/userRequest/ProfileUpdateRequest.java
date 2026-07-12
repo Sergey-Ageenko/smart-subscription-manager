@@ -1,4 +1,4 @@
-package com.ssm.core_service.model.request;
+package com.ssm.core_service.model.request.userRequest;
 
 import jakarta.validation.constraints.Size;
 

@@ -1,7 +1,7 @@
 package com.ssm.core_service.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssm.core_service.model.request.BudgetUpdateRequest;
+import com.ssm.core_service.model.request.userRequest.BudgetUpdateRequest;
 import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.security.JwtUserPrincipal;

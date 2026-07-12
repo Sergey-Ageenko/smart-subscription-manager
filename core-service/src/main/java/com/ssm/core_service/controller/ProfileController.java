@@ -1,6 +1,6 @@
 package com.ssm.core_service.controller;
 
-import com.ssm.core_service.model.request.ProfileUpdateRequest;
+import com.ssm.core_service.model.request.userRequest.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.security.JwtUserPrincipal;

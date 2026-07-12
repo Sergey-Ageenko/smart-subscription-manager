@@ -1,17 +1,15 @@
 package com.ssm.core_service.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssm.core_service.model.request.NewSubscriptionRequest;
-import com.ssm.core_service.model.request.SubscriptionUpdateRequest;
+import com.ssm.core_service.model.request.adminRequest.SubscriptionNewRequest;
+import com.ssm.core_service.model.request.adminRequest.SubscriptionUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.SubscriptionResponse;
-import com.ssm.core_service.security.JwtUserPrincipal;
 import com.ssm.core_service.service.SubscriptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,38 +24,37 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     @GetMapping
-    public ResponseEntity<CoreResponse<List<SubscriptionResponse>>> getAllSubscriptions(@AuthenticationPrincipal JwtUserPrincipal principal){
+    public ResponseEntity<CoreResponse<List<SubscriptionResponse>>> getAllSubscriptions(){
         return ResponseEntity.ok()
-                .body(subscriptionService.getAllSubscriptions(principal.userId()));
+                .body(subscriptionService.getAllSubscriptions());
     }
 
     @GetMapping("/{subscriptionId}")
-    public ResponseEntity<CoreResponse<SubscriptionResponse>> getSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
-                                                                              @PathVariable UUID subscriptionId){
+    public ResponseEntity<CoreResponse<SubscriptionResponse>> getSubscription(@PathVariable UUID subscriptionId){
         return ResponseEntity.ok()
-                .body(subscriptionService.getSubscription(principal.userId(), subscriptionId));
+                .body(subscriptionService.getSubscription(subscriptionId));
     }
 
     @PostMapping
-    public ResponseEntity<CoreResponse<SubscriptionResponse>> createSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
-                                                                                 @Valid @RequestBody NewSubscriptionRequest request) throws JsonProcessingException {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CoreResponse<SubscriptionResponse>> createSubscription(@Valid @RequestBody SubscriptionNewRequest request) {
         return ResponseEntity.ok()
-                .body(subscriptionService.createSubscription(principal.userId(), request));
+                .body(subscriptionService.createSubscription(request));
     }
 
     @PatchMapping("/{subscriptionId}/update")
-    public ResponseEntity<CoreResponse<SubscriptionResponse>> updateSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
-                                                                                 @PathVariable UUID subscriptionId,
-                                                                                 @Valid @RequestBody SubscriptionUpdateRequest request) throws JsonProcessingException {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CoreResponse<SubscriptionResponse>> updateSubscription(@PathVariable UUID subscriptionId,
+                                                                                 @Valid @RequestBody SubscriptionUpdateRequest request) {
         return ResponseEntity.ok()
-                .body(subscriptionService.updateSubscription(principal.userId(), subscriptionId, request));
+                .body(subscriptionService.updateSubscription(subscriptionId, request));
     }
 
-    @PatchMapping("/{subscriptionId}/cancel")
-    public ResponseEntity<CoreResponse<SubscriptionResponse>> cancelSubscription(@AuthenticationPrincipal JwtUserPrincipal principal,
-                                                                                 @PathVariable UUID subscriptionId) throws JsonProcessingException {
+    @DeleteMapping("/{subscriptionId}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CoreResponse<SubscriptionResponse>> deleteSubscription(@PathVariable UUID subscriptionId)  {
         return ResponseEntity.ok()
-                .body(subscriptionService.cancelSubscription(principal.userId(), subscriptionId));
+                .body(subscriptionService.deleteSubscription(subscriptionId));
     }
 }
 
