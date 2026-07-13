@@ -94,14 +94,13 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
         UserRegisteredEvent event =
                 new UserRegisteredEvent(
-                        UUID.randomUUID(),
                         user.getId(),
                         request.getFirstName(),
                         request.getLastName()
                 );
         OutboxEvent outboxEvent = OutboxEvent.builder()
                 .eventName(ApiConstants.USER_REGISTERED)
-                .eventId(event.eventId())
+                .eventId(UUID.randomUUID())
                 .payload(objectMapper.writeValueAsString(event))
                 .status(OutboxStatus.NEW)
                 .createdAt(LocalDateTime.now())

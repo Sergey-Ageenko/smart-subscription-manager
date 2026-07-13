@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class UserRegisteredEventListener {
             topics = ApiConstants.USER_REGISTERED,
             groupId = "core-group"
     )
+    @Transactional
     public void handle(ConsumerRecord<String, String> record) throws JsonProcessingException {
         log.debug("Received message - eventId: {} - key: {} - payload: {}",
                 record.value(),

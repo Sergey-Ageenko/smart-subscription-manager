@@ -1,6 +1,7 @@
 package com.ssm.auth_service.model.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -11,7 +12,8 @@ public class RegisterRequest {
     @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @Size(min = 8, max = 255, message = "The password length must be no more than 255 characters.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
+            message = "Password must be 8-20 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
     @NotBlank(message = "Password cannot be empty")
     private String password;
 
