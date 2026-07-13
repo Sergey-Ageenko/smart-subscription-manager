@@ -49,13 +49,15 @@ public class UserRegisteredEventListener {
                     .build());
             profileService.createProfile(event);
         } catch (DuplicateEventException e) {
-            log.debug("Duplicate message received: {}", e.getMessage());
+            log.debug("Duplicate message {}", record.key());
+
+        } catch (RetryableException e) {
+            log.warn("Retryable error", e);
+            throw e;
+
         } catch (Exception e) {
-            if (e instanceof RetryableException) {
-                log.debug("Throwing retryable exception.");
-                throw e;
-            }
-            log.error("Error processing message: {}", e.getMessage());
+            log.error("Unexpected error", e);
+            throw e;
         }
     }
 }
