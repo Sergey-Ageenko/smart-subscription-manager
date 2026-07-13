@@ -50,7 +50,7 @@ public class SubscriptionController {
                 .body(subscriptionService.updateSubscription(subscriptionId, request));
     }
 
-    @DeleteMapping("/{subscriptionId}/delete")
+    @DeleteMapping("/{subscriptionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CoreResponse<SubscriptionResponse>> deleteSubscription(@PathVariable UUID subscriptionId)  {
         return ResponseEntity.ok()
