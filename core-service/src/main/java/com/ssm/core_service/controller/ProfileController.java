@@ -27,7 +27,7 @@ public class ProfileController {
                 .body(profileService.getProfile(principal.userId()));
     }
 
-    @PatchMapping("/me/update")
+    @PatchMapping("/me")
     public ResponseEntity<CoreResponse<ProfileResponse>> updateProfile(@AuthenticationPrincipal JwtUserPrincipal principal,
                                                                        @Valid @RequestBody ProfileUpdateRequest request) {
         return ResponseEntity.ok()

@@ -42,7 +42,7 @@ public class SubscriptionController {
                 .body(subscriptionService.createSubscription(request));
     }
 
-    @PatchMapping("/{subscriptionId}/update")
+    @PatchMapping("/{subscriptionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CoreResponse<SubscriptionResponse>> updateSubscription(@PathVariable UUID subscriptionId,
                                                                                  @Valid @RequestBody SubscriptionUpdateRequest request) {

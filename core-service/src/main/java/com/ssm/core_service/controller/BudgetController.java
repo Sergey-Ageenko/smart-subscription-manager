@@ -27,7 +27,7 @@ public class BudgetController {
                         .body(budgetService.getBudget(principal.userId()));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal JwtUserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request) throws JsonProcessingException {
         return ResponseEntity.ok()
                 .body(budgetService.updateBudget(principal.userId(), request));
