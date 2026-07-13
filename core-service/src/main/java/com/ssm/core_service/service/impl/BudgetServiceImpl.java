@@ -12,6 +12,7 @@ import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.repository.BudgetRepository;
 import com.ssm.core_service.repository.OutboxRepository;
 import com.ssm.core_service.service.BudgetService;
+import com.ssm.events.BudgetSettingsUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,15 @@ public class BudgetServiceImpl implements BudgetService {
 
     private final BudgetRepository budgetRepository;
     private final OutboxRepository outboxRepository;
-    private final BudgetEventFactory budgetEventFactory;
+    private final BudgetEventFactory eventFactory;
 
 
     @Override
     @Transactional(readOnly = true)
-    public CoreResponse<BudgetResponse> getBudget(UUID userId) {
-        Budget budget = budgetRepository.findByProfile_UserId(userId)
+    public CoreResponse<BudgetResponse> getBudget(UUID profileId) {
+        Budget budget = budgetRepository.findByProfile_Id(profileId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_BUDGET_NOT_FOUND_BY_ID.getMessage(userId)
+                        ApiErrorMessage.USER_BUDGET_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
         return CoreResponse.createSuccessful(
                 createResponse(budget)
@@ -43,13 +44,13 @@ public class BudgetServiceImpl implements BudgetService {
 
     @Override
     @Transactional
-    public CoreResponse<BudgetResponse> updateBudget(UUID userId, BudgetUpdateRequest request) throws JsonProcessingException {
-        Budget budget = budgetRepository.findByProfile_UserId(userId)
+    public CoreResponse<BudgetResponse> updateBudget(UUID profileId, BudgetUpdateRequest request) throws JsonProcessingException {
+        Budget budget = budgetRepository.findByProfile_Id(profileId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_BUDGET_NOT_FOUND_BY_ID.getMessage(userId)
+                        ApiErrorMessage.USER_BUDGET_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
         budget.setMonthlyLimit(request.newMonthlyLimit());
-        OutboxEvent outboxEvent = budgetEventFactory.updated(budget);
+        OutboxEvent outboxEvent = eventFactory.updated(budget);
         outboxRepository.save(outboxEvent);
         log.info("Budget {} updated successfully.", budget.getId());
         return CoreResponse.createSuccessful(

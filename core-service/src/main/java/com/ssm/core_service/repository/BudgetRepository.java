@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BudgetRepository extends JpaRepository<Budget, UUID> {
-    Optional<Budget> findByProfile_UserId(UUID userId);
+    Optional<Budget> findByProfile_Id(UUID profileId);
 }

@@ -46,7 +46,7 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
     @Transactional(readOnly = true)
     public CoreResponse<List<ProfileSubscriptionResponse>> getAllSubscriptions(UUID profileId) {
         List<ProfileSubscriptionResponse> responses = profileSubscriptionRepository
-                .findAllById_ProfileId(profileId)
+                .findAllByProfile_Id(profileId)
                 .stream()
                 .map(this::createResponse)
                 .toList();

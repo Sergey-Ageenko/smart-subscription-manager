@@ -1,10 +1,15 @@
 package com.ssm.core_service.security.filter;
 
 
+import com.ssm.core_service.exception.DataExistException;
+import com.ssm.core_service.exception.NotFoundException;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.constant.ApiConstants;
+import com.ssm.core_service.model.entity.Profile;
+import com.ssm.core_service.repository.ProfileRepository;
 import com.ssm.core_service.security.JwtTokenProvider;
 import com.ssm.core_service.security.JwtUserPrincipal;
+import com.ssm.core_service.service.ProfileService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -34,6 +39,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final ProfileRepository profileRepository;
 
     @Override
     protected void doFilterInternal(
@@ -54,13 +60,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 return;
             }
             UUID userId = UUID.fromString(jwtTokenProvider.getUserId(claims));
+            Profile profile = profileRepository.findByUserId(userId)
+                    .orElseThrow(() -> new NotFoundException(
+                            ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
+                    ));
             List<SimpleGrantedAuthority> authorities =
                     jwtTokenProvider.getRoles(claims).stream()
                             .map(SimpleGrantedAuthority::new)
                             .toList();
             Authentication auth =
                     new UsernamePasswordAuthenticationToken(
-                            new JwtUserPrincipal(userId),
+                            new JwtUserPrincipal(profile.getId()),
                             null,
                             authorities
                     );

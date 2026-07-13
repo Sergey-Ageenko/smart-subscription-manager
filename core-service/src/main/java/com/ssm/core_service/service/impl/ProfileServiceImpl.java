@@ -31,10 +31,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional(readOnly = true)
-    public CoreResponse<ProfileResponse> getProfile(UUID userId) {
-        Profile profile = profileRepository.findByUserId(userId)
+    public CoreResponse<ProfileResponse> getProfile(UUID profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
         return CoreResponse.createSuccessful(
                 createResponse(profile)
@@ -44,12 +44,12 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public void createProfile(UserRegisteredEvent event) {
-        if (profileRepository.existsByUserId(event.userId())){
+        if (profileRepository.existsByUserId(event.userId())) {
             throw new DataExistException(ApiErrorMessage.USER_PROFILE_IS_ALREADY_EXISTS.getMessage(event.userId()));
         }
         Profile savedProfile = profileRepository.save(
                 Profile.builder()
-                        .id(event.userId())
+                        .userId(event.userId())
                         .firstName(event.firstName())
                         .lastName(event.lastName())
                         .build());
@@ -63,10 +63,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public CoreResponse<ProfileResponse> updateProfile(UUID userId, ProfileUpdateRequest request) {
-        Profile profile = profileRepository.findByUserId(userId)
+    public CoreResponse<ProfileResponse> updateProfile(UUID profileId, ProfileUpdateRequest request) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
                 ));
         if (StringUtils.hasText(request.firstName())) {
             profile.setFirstName(request.firstName());

@@ -16,6 +16,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Slf4j
@@ -41,7 +42,7 @@ public class UserRegisteredEventListener {
             UserRegisteredEvent event =
                     objectMapper.readValue(record.value(), UserRegisteredEvent.class);
             processedEventService.process(ProcessedEvent.builder()
-                    .eventId(event.eventId())
+                    .eventId(UUID.fromString(record.key()))
                     .processedAt(LocalDateTime.now())
                     .build());
             profileService.createProfile(event);
