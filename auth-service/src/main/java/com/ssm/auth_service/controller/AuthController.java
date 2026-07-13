@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @RequestBody @Valid LoginRequest loginRequest)
-    {
+            @RequestBody @Valid LoginRequest loginRequest) {
         TokenResponse tokenResponse = authService.login(loginRequest);
         AuthResponse authResponse = AuthResponse
                 .createSuccessfulWithNewToken(tokenResponse.accessToken());
@@ -45,7 +45,7 @@ public class AuthController {
         AuthResponse authResponse = AuthResponse
                 .createSuccessfulWithNewUser(tokenResponse.accessToken());
         ResponseCookie cookie = ApiUtils.getCookieWithRefreshToken(tokenResponse.refreshToken());
-        return ResponseEntity.ok()
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResponse);
     }
