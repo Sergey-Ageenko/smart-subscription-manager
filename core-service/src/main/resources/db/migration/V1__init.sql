@@ -2,7 +2,8 @@ CREATE SCHEMA IF NOT EXISTS core_service;
 
 CREATE TABLE profiles
 (
-    id         UUID PRIMARY KEY,
+    id         UUID PRIMARY KEY  DEFAULT gen_random_uuid(),
+    user_id    UUID NOT NULL UNIQUE,
     first_name VARCHAR(30) NOT NULL,
     last_name  VARCHAR(80) NOT NULL
 

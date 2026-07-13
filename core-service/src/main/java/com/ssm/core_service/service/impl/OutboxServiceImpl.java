@@ -42,7 +42,6 @@ public class OutboxServiceImpl implements OutboxService {
         } else {
             event.setStatus(OutboxStatus.NEW);
         }
-
         outboxRepository.save(event);
     }
 }

@@ -31,20 +31,20 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional(readOnly = true)
-    public CoreResponse<ProfileResponse> getProfile(UUID profileId) {
-        Profile profile = profileRepository.findById(profileId)
+    public CoreResponse<ProfileResponse> getProfile(UUID userId) {
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
                 ));
         return CoreResponse.createSuccessful(
-                toResponse(profile)
+                createResponse(profile)
         );
     }
 
     @Override
     @Transactional
     public void createProfile(UserRegisteredEvent event) {
-        if (profileRepository.existsById(event.userId())) {
+        if (profileRepository.existsByUserId(event.userId())){
             throw new DataExistException(ApiErrorMessage.USER_PROFILE_IS_ALREADY_EXISTS.getMessage(event.userId()));
         }
         Profile savedProfile = profileRepository.save(
@@ -63,10 +63,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public CoreResponse<ProfileResponse> updateProfile(UUID profileId, ProfileUpdateRequest request) {
-        Profile profile = profileRepository.findById(profileId)
+    public CoreResponse<ProfileResponse> updateProfile(UUID userId, ProfileUpdateRequest request) {
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
                 ));
         if (StringUtils.hasText(request.firstName())) {
             profile.setFirstName(request.firstName());
@@ -76,11 +76,11 @@ public class ProfileServiceImpl implements ProfileService {
         }
         log.info("Profile {} updated successfully.", profile.getId());
         return CoreResponse.createSuccessful(
-                toResponse(profile)
+                createResponse(profile)
         );
     }
 
-    private ProfileResponse toResponse(Profile profile){
+    private ProfileResponse createResponse(Profile profile){
         return new ProfileResponse(
                 profile.getFirstName(),
                 profile.getLastName()

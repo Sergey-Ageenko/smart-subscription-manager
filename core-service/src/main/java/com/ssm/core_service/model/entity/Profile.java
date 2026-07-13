@@ -16,7 +16,11 @@ import java.util.UUID;
 public class Profile {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "user_id", nullable = false, unique = true, updatable = false)
+    private UUID userId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
