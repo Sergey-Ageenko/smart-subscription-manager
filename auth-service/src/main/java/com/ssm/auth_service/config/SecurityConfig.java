@@ -3,7 +3,6 @@ package com.ssm.auth_service.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ssm.auth_service.security.filter.JwtRequestFilter;
 import com.ssm.auth_service.security.handler.CustomAccessDeniedHandler;
 import com.ssm.auth_service.security.handler.CustomAuthenticationEntryPoint;
 import com.ssm.auth_service.service.UserService;
@@ -22,7 +21,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 
@@ -31,11 +29,10 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtRequestFilter jwtRequestFilter;
     private static final PathPatternRequestMatcher[] NOT_SECURED_URLS = new PathPatternRequestMatcher[]{
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/login"),
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/register"),
-            PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/refresh")
+            PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/refresh"),
     };
 
     @Bean
@@ -52,12 +49,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().denyAll())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper()))
                         .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper()))
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                );
         return http.build();
     }
 

@@ -1,7 +1,7 @@
 package com.ssm.core_service.service.impl;
 
-import com.ssm.core_service.exception.DataExistException;
-import com.ssm.core_service.exception.NotFoundException;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.NotFoundException;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
 import com.ssm.core_service.model.entity.Profile;
@@ -11,7 +11,7 @@ import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.repository.BudgetRepository;
 import com.ssm.core_service.repository.ProfileRepository;
 import com.ssm.core_service.service.ProfileService;
-import com.ssm.events.UserRegisteredEvent;
+import com.ssm.common.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -78,6 +78,15 @@ public class ProfileServiceImpl implements ProfileService {
         return CoreResponse.createSuccessful(
                 createResponse(profile)
         );
+    }
+
+    @Override
+    public UUID getProfileId(UUID userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException(
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
+                ));
+        return profile.getId();
     }
 
     private ProfileResponse createResponse(Profile profile){

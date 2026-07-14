@@ -1,7 +1,7 @@
 package com.ssm.core_service.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssm.core_service.exception.NotFoundException;
+import com.ssm.common.exception.NotFoundException;
 import com.ssm.core_service.factory.BudgetEventFactory;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
@@ -12,7 +12,6 @@ import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.repository.BudgetRepository;
 import com.ssm.core_service.repository.OutboxRepository;
 import com.ssm.core_service.service.BudgetService;
-import com.ssm.events.BudgetSettingsUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

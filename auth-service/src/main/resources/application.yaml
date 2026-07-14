@@ -3,4 +3,4 @@ spring:
     name: auth-service
 
 server:
-  port: 8189
+  port: 8081

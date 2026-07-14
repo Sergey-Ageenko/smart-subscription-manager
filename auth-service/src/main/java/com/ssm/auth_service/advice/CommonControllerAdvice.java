@@ -1,10 +1,10 @@
 package com.ssm.auth_service.advice;
 
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
-import com.ssm.auth_service.exception.DataExistException;
-import com.ssm.auth_service.exception.InvalidDataException;
-import com.ssm.auth_service.exception.NotFoundException;
-import com.ssm.auth_service.exception.UnauthorizedException;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.InvalidDataException;
+import com.ssm.common.exception.NotFoundException;
+import com.ssm.common.exception.UnauthorizedException;
 import com.ssm.auth_service.utils.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

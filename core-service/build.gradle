@@ -20,7 +20,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'org.flywaydb:flyway-database-postgresql'
 
-    implementation project (':common-events')
+    implementation project (':common')
 
     implementation 'org.springframework.kafka:spring-kafka'
 

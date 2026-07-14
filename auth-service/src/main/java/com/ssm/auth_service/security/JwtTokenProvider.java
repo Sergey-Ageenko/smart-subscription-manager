@@ -1,7 +1,6 @@
 package com.ssm.auth_service.security;
 
 import com.ssm.auth_service.model.constant.ApiConstants;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,7 +13,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 @Slf4j
 @Component
@@ -30,47 +28,17 @@ public class JwtTokenProvider {
         this.accessTokenExpiration = accessTokenExpiration;
     }
 
-    public String extractUserId(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public boolean isTokenValid(String token, JwtUserPrincipal jwtUserPrincipal) {
-        final String userId = extractUserId(token);
-        return (userId.equals(jwtUserPrincipal.getUserId().toString())) && !isTokenExpired(token);
-    }
-
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
-            return Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    public String generateToken(JwtUserPrincipal jwtUserPrincipal) {
+    public String generateToken(UserPrincipal userPrincipal) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(ApiConstants.USER_ID, jwtUserPrincipal.getUserId());
-        claims.put(ApiConstants.USER_ROLES, jwtUserPrincipal.getAuthorities().stream()
+        claims.put(ApiConstants.USER_ID, userPrincipal.getUserId());
+        claims.put(ApiConstants.USER_ROLES, userPrincipal.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .toList());
-        return generateToken(claims, jwtUserPrincipal);
+        return generateToken(claims, userPrincipal);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, JwtUserPrincipal jwtUserPrincipal) {
-        String userId = jwtUserPrincipal.getUserId().toString();
+    private String generateToken(Map<String, Object> extraClaims, UserPrincipal userPrincipal) {
+        String userId = userPrincipal.getUserId().toString();
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userId)

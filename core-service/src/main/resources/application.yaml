@@ -3,4 +3,4 @@ spring:
     name: core-service
 
 server:
-  port: 8190
+  port: 8082

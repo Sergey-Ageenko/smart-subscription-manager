@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssm.core_service.model.request.userRequest.BudgetUpdateRequest;
 import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
-import com.ssm.core_service.security.JwtUserPrincipal;
+import com.ssm.core_service.security.UserPrincipal;
 import com.ssm.core_service.service.BudgetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +22,14 @@ public class BudgetController {
     private final BudgetService budgetService;
 
     @GetMapping
-    public ResponseEntity<CoreResponse<BudgetResponse>> getBudget(@AuthenticationPrincipal JwtUserPrincipal principal){
+    public ResponseEntity<CoreResponse<BudgetResponse>> getBudget(@AuthenticationPrincipal UserPrincipal principal){
         return ResponseEntity.ok()
-                        .body(budgetService.getBudget(principal.userId()));
+                        .body(budgetService.getBudget(principal.profileId()));
     }
 
     @PutMapping
-    public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal JwtUserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request) throws JsonProcessingException {
+    public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal UserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request) throws JsonProcessingException {
         return ResponseEntity.ok()
-                .body(budgetService.updateBudget(principal.userId(), request));
+                .body(budgetService.updateBudget(principal.profileId(), request));
     }
 }

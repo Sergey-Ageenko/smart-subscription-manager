@@ -20,7 +20,7 @@ dependencies {
 
     implementation 'org.apache.commons:commons-lang3'
 
-    implementation project (':common-events')
+    implementation project (':common')
 
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'org.flywaydb:flyway-database-postgresql'

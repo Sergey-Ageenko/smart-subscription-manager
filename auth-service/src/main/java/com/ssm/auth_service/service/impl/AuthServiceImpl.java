@@ -1,17 +1,14 @@
 package com.ssm.auth_service.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssm.auth_service.model.constant.ApiConstants;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.InvalidDataException;
+import com.ssm.common.exception.NotFoundException;
+import com.ssm.auth_service.factory.UserEventFactory;
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
 import com.ssm.auth_service.model.entity.OutboxEvent;
 import com.ssm.auth_service.model.entity.Role;
 import com.ssm.auth_service.model.entity.User;
-import com.ssm.auth_service.model.enums.OutboxStatus;
 import com.ssm.auth_service.model.enums.UserStatus;
-import com.ssm.auth_service.exception.DataExistException;
-import com.ssm.auth_service.exception.InvalidDataException;
-import com.ssm.auth_service.exception.NotFoundException;
 import com.ssm.auth_service.model.request.LoginRequest;
 import com.ssm.auth_service.model.request.RegisterRequest;
 import com.ssm.auth_service.model.response.TokenResponse;
@@ -19,10 +16,9 @@ import com.ssm.auth_service.repository.OutboxRepository;
 import com.ssm.auth_service.repository.RoleRepository;
 import com.ssm.auth_service.repository.UserRepository;
 import com.ssm.auth_service.security.JwtTokenProvider;
-import com.ssm.auth_service.security.JwtUserPrincipal;
+import com.ssm.auth_service.security.UserPrincipal;
 import com.ssm.auth_service.service.AuthService;
 import com.ssm.auth_service.service.RefreshTokenService;
-import com.ssm.events.UserRegisteredEvent;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager manager;
     private final OutboxRepository outboxRepository;
-    private final ObjectMapper objectMapper;
+    private final UserEventFactory eventFactory;
 
 
     @Override
@@ -65,19 +61,19 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadCredentialsException e) {
             throw new InvalidDataException(ApiErrorMessage.INVALID_USER_OR_PASSWORD.getMessage());
         }
-        JwtUserPrincipal jwtUserPrincipal = (JwtUserPrincipal) authentication.getPrincipal();
-        if (jwtUserPrincipal.getStatus() != UserStatus.ACTIVE) {
-            throw new InvalidDataException(ApiErrorMessage.USER_IS_BLOCKED.getMessage(jwtUserPrincipal.getUsername()));
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        if (userPrincipal.getStatus() != UserStatus.ACTIVE) {
+            throw new InvalidDataException(ApiErrorMessage.USER_IS_BLOCKED.getMessage(userPrincipal.getUsername()));
         }
-        String accessToken = tokenProvider.generateToken(jwtUserPrincipal);
-        String refreshToken = refreshTokenService.create(jwtUserPrincipal);
+        String accessToken = tokenProvider.generateToken(userPrincipal);
+        String refreshToken = refreshTokenService.create(userPrincipal);
         return new TokenResponse(accessToken, refreshToken);
     }
 
 
     @Override
     @Transactional
-    public TokenResponse register(@NotNull RegisterRequest request) throws JsonProcessingException {
+    public TokenResponse register(@NotNull RegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new DataExistException(ApiErrorMessage.USER_WITH_USERNAME_ALREADY_EXISTS.getMessage(request.getUsername()));
         }
@@ -92,19 +88,7 @@ public class AuthServiceImpl implements AuthService {
                 .roles(Set.of(userRole))
                 .build();
         User savedUser = userRepository.save(user);
-        UserRegisteredEvent event =
-                new UserRegisteredEvent(
-                        user.getId(),
-                        request.getFirstName(),
-                        request.getLastName()
-                );
-        OutboxEvent outboxEvent = OutboxEvent.builder()
-                .eventName(ApiConstants.USER_REGISTERED)
-                .eventId(UUID.randomUUID())
-                .payload(objectMapper.writeValueAsString(event))
-                .status(OutboxStatus.NEW)
-                .createdAt(LocalDateTime.now())
-                .build();
+        OutboxEvent outboxEvent = eventFactory.registered(user.getId(), request);
         outboxRepository.save(outboxEvent);
         return getTokenResponse(savedUser);
     }
@@ -121,11 +105,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private TokenResponse getTokenResponse(User user) {
-        JwtUserPrincipal jwtUserPrincipal = new JwtUserPrincipal(user);
+        UserPrincipal userPrincipal = new UserPrincipal(user);
         String accessToken = tokenProvider.generateToken(
-                jwtUserPrincipal
+                userPrincipal
         );
-        String newRefreshToken = refreshTokenService.create(jwtUserPrincipal);
+        String newRefreshToken = refreshTokenService.create(userPrincipal);
         return new TokenResponse(accessToken, newRefreshToken);
     }
 }

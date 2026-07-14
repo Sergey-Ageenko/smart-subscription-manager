@@ -2,8 +2,8 @@ package com.ssm.auth_service.service.impl;
 
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
 import com.ssm.auth_service.model.constant.ApiConstants;
-import com.ssm.auth_service.exception.UnauthorizedException;
-import com.ssm.auth_service.security.JwtUserPrincipal;
+import com.ssm.common.exception.UnauthorizedException;
+import com.ssm.auth_service.security.UserPrincipal;
 import com.ssm.auth_service.service.RefreshTokenService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private Long refreshTokenExpiration;
 
     @Override
-    public String create(@NotNull JwtUserPrincipal principal) {
+    public String create(@NotNull UserPrincipal principal) {
         String userId = principal.getUserId().toString();
         String oldToken = redisTemplate.opsForValue()
                 .get(ApiConstants.PREFIX_USER_REFRESH + userId);

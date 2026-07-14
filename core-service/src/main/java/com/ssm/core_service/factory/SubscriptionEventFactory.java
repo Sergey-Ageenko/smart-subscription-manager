@@ -3,9 +3,9 @@ package com.ssm.core_service.factory;
 import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.model.entity.OutboxEvent;
 import com.ssm.core_service.model.entity.profileSubscription.ProfileSubscription;
-import com.ssm.events.SubscriptionCancelledEvent;
-import com.ssm.events.SubscriptionCreatedEvent;
-import com.ssm.events.SubscriptionUpdatedEvent;
+import com.ssm.common.event.SubscriptionCancelledEvent;
+import com.ssm.common.event.SubscriptionCreatedEvent;
+import com.ssm.common.event.SubscriptionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +48,7 @@ public class SubscriptionEventFactory {
                         subscription.getStatus().name()
                 );
         return outboxFactory.create(
-                ApiConstants.SUBSCRIPTION_UPDATED,
+                ApiConstants.SUBSCRIPTION_CANCELLED,
                 event
         );
     }

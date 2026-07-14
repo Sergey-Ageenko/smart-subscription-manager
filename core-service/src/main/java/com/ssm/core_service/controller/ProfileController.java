@@ -3,7 +3,7 @@ package com.ssm.core_service.controller;
 import com.ssm.core_service.model.request.userRequest.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
-import com.ssm.core_service.security.JwtUserPrincipal;
+import com.ssm.core_service.security.UserPrincipal;
 import com.ssm.core_service.service.ProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +22,23 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping("/me")
-    public ResponseEntity<CoreResponse<ProfileResponse>> getProfile(@AuthenticationPrincipal JwtUserPrincipal principal) {
+    public ResponseEntity<CoreResponse<ProfileResponse>> getProfile(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok()
-                .body(profileService.getProfile(principal.userId()));
+                .body(profileService.getProfile(principal.profileId()));
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<CoreResponse<ProfileResponse>> updateProfile(@AuthenticationPrincipal JwtUserPrincipal principal,
+    public ResponseEntity<CoreResponse<ProfileResponse>> updateProfile(@AuthenticationPrincipal UserPrincipal principal,
                                                                        @Valid @RequestBody ProfileUpdateRequest request) {
         return ResponseEntity.ok()
-                .body(profileService.updateProfile(principal.userId(), request));
+                .body(profileService.updateProfile(principal.profileId(), request));
     }
 
     @GetMapping("/test/admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> testAdminRole(@AuthenticationPrincipal JwtUserPrincipal principal) {
+    public ResponseEntity<String> testAdminRole(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok()
-                .body("ADMIN ID: " + principal.userId());
+                .body("ADMIN ID: " + principal.profileId());
     }
 
 }

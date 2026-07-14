@@ -2,10 +2,10 @@ package com.ssm.core_service.advice;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.ssm.core_service.exception.DataExistException;
-import com.ssm.core_service.exception.InvalidDataException;
-import com.ssm.core_service.exception.NotFoundException;
-import com.ssm.core_service.exception.UnauthorizedException;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.InvalidDataException;
+import com.ssm.common.exception.NotFoundException;
+import com.ssm.common.exception.UnauthorizedException;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.utils.ApiError;
 import jakarta.servlet.http.HttpServletRequest;

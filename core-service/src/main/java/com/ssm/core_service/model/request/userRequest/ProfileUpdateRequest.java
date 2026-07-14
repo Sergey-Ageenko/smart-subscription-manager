@@ -4,10 +4,10 @@ import jakarta.validation.constraints.Size;
 
 public record ProfileUpdateRequest(
 
-        @Size(min = 2, max = 255)
+        @Size(min = 2, max = 30)
         String firstName,
 
-        @Size(min = 2, max = 255)
+        @Size(min = 2, max = 80)
         String lastName
 
 ) {

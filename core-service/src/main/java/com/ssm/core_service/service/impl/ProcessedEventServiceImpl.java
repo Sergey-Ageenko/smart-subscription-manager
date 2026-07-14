@@ -1,6 +1,6 @@
 package com.ssm.core_service.service.impl;
 
-import com.ssm.core_service.exception.DuplicateEventException;
+import com.ssm.common.exception.DuplicateEventException;
 import com.ssm.core_service.model.entity.ProcessedEvent;
 import com.ssm.core_service.repository.ProcessedEventRepository;
 import com.ssm.core_service.service.ProcessedEventService;

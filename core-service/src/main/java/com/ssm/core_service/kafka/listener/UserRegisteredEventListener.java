@@ -2,13 +2,13 @@ package com.ssm.core_service.kafka.listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssm.core_service.exception.DuplicateEventException;
-import com.ssm.core_service.exception.RetryableException;
+import com.ssm.common.exception.DuplicateEventException;
+import com.ssm.common.exception.RetryableException;
 import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.model.entity.ProcessedEvent;
 import com.ssm.core_service.service.ProcessedEventService;
 import com.ssm.core_service.service.ProfileService;
-import com.ssm.events.UserRegisteredEvent;
+import com.ssm.common.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

@@ -2,9 +2,9 @@ package com.ssm.auth_service.service.impl;
 
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
 import com.ssm.auth_service.model.entity.User;
-import com.ssm.auth_service.exception.NotFoundException;
+import com.ssm.common.exception.NotFoundException;
 import com.ssm.auth_service.repository.UserRepository;
-import com.ssm.auth_service.security.JwtUserPrincipal;
+import com.ssm.auth_service.security.UserPrincipal;
 import com.ssm.auth_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,18 +23,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public JwtUserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsernameWithRoles(username)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_NOT_FOUND_BY_USERNAME.getMessage(username)));
-        return new JwtUserPrincipal(user);
+        return new UserPrincipal(user);
     }
 
     @Override
     @Transactional
-    public JwtUserPrincipal loadUserById(String userId) throws UsernameNotFoundException {
+    public UserPrincipal loadUserById(String userId) throws UsernameNotFoundException {
         User user = userRepository.findByIdWithRoles(UUID.fromString(userId))
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_NOT_FOUND_BY_ID.getMessage(userId)));
-        return new JwtUserPrincipal(user);
+        return new UserPrincipal(user);
     }
 
 

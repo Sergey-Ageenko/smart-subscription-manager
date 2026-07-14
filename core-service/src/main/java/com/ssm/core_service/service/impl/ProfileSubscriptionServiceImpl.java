@@ -1,8 +1,8 @@
 package com.ssm.core_service.service.impl;
 
-import com.ssm.core_service.exception.DataExistException;
-import com.ssm.core_service.exception.InvalidDataException;
-import com.ssm.core_service.exception.NotFoundException;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.InvalidDataException;
+import com.ssm.common.exception.NotFoundException;
 import com.ssm.core_service.factory.SubscriptionEventFactory;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.OutboxEvent;

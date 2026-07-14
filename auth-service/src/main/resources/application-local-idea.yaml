@@ -44,10 +44,6 @@ app:
   outbox:
     poll-interval-ms: 5000
 
-
-server:
-  port: 8189
-
 logging:
   level:
     com.ssm.auth_service: TRACE
