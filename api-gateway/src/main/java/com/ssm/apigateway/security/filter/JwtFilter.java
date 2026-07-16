@@ -1,5 +1,6 @@
 package com.ssm.apigateway.security.filter;
 
+import com.ssm.apigateway.constant.ApiConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -29,8 +30,8 @@ public class JwtFilter implements GlobalFilter, Ordered {
                             .collect(Collectors.joining(","));
                     ServerHttpRequest request = exchange.getRequest()
                             .mutate()
-                            .header("X-User-Id", userId)
-                            .header("X-User-Roles", roles)
+                            .header(ApiConstants.USER_ID, userId)
+                            .header(ApiConstants.USER_ROLES, roles)
                             .build();
                     log.info("Forwarding userId={}", userId);
                     log.info("Forwarding roles={}", roles);
