@@ -14,4 +14,6 @@ public class ApiConstants {
     public static final String REFRESH_TOKEN = "refresh-token";
     public static final String JWT_ERROR = "jwt-error";
     public static final String USER_REGISTERED = "user-registered";
+    public static final String PREFIX_BLACKLIST = "blacklist:";
+    public static final String PREFIX_BEARER = "Bearer ";
 }

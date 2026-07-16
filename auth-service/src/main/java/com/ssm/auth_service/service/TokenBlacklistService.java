@@ -1,4 +1,6 @@
 package com.ssm.auth_service.service;
 
-public class TokenBlacklistService {
+public interface TokenBlacklistService {
+
+    void blacklist(String accessToken);
 }

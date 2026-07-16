@@ -1,5 +1,6 @@
 package com.ssm.auth_service.service.impl;
 
+import com.ssm.auth_service.service.TokenBlacklistService;
 import com.ssm.common.exception.DataExistException;
 import com.ssm.common.exception.InvalidDataException;
 import com.ssm.common.exception.NotFoundException;
@@ -48,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager manager;
     private final OutboxRepository outboxRepository;
     private final UserEventFactory eventFactory;
+    private final TokenBlacklistService tokenBlacklistService;
 
 
     @Override
@@ -102,6 +104,12 @@ public class AuthServiceImpl implements AuthService {
                         new NotFoundException(ApiErrorMessage.USER_NOT_FOUND_BY_ID.getMessage(userId)));
         refreshTokenService.delete(refreshToken);
         return getTokenResponse(user);
+    }
+
+    @Override
+    public void logout(String accessToken, String refreshToken) {
+        tokenBlacklistService.blacklist(accessToken);
+        refreshTokenService.delete(refreshToken);
     }
 
     private TokenResponse getTokenResponse(User user) {

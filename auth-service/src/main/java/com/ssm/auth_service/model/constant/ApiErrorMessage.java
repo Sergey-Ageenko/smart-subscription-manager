@@ -12,10 +12,11 @@ public enum ApiErrorMessage {
     USER_WITH_USERNAME_ALREADY_EXISTS("User with username: '%s' already exists"),
     ROLE_NOT_FOUND("Role with name: '%s' not found"),
     INVALID_TOKEN("Token is invalid"),
-    TOKEN_EXPIRED("Token expired."),
+    REFRESH_TOKEN_INVALID_OR_EXPIRED("Refresh token is invalid or expired"),
     INVALID_USER_OR_PASSWORD("Invalid username or password. Try again"),
     USER_IS_BLOCKED("User with username: %s is blocked"),
-    VALIDATION_FAILED("Validation failed");
+    VALIDATION_FAILED("Validation failed"),
+    INVALID_AUTHORIZATION_HEADER("Invalid Authorization header");
 
     private final String message;
 

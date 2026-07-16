@@ -33,6 +33,7 @@ public class SecurityConfig {
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/login"),
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/register"),
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/refresh"),
+            PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/logout"),
     };
 
     @Bean

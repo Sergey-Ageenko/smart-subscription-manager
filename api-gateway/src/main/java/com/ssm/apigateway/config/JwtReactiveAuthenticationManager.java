@@ -1,6 +1,10 @@
 package com.ssm.apigateway.config;
 
+import com.ssm.apigateway.constant.ApiConstants;
+import com.ssm.apigateway.constant.ApiErrorMessage;
 import com.ssm.apigateway.security.JwtTokenProvider;
+import com.ssm.apigateway.service.TokenBlacklistService;
+import com.ssm.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +22,17 @@ import reactor.core.publisher.Mono;
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenBlacklistService blacklistService;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         log.info("JWT AUTH MANAGER CALLED");
         String token = authentication.getCredentials().toString();
+        if (blacklistService.isBlacklisted(token)) {
+            return Mono.error(
+                    new UnauthorizedException(ApiErrorMessage.BLACKLISTED_TOKEN.getMessage())
+            );
+        }
         try {
             Claims claims = jwtTokenProvider.extractAllClaims(token);
             return Mono.just(new UsernamePasswordAuthenticationToken(
@@ -31,7 +41,9 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
                     jwtTokenProvider.getRoles(claims)
             ));
         }catch (JwtException e){
-            return Mono.error(new BadCredentialsException("Invalid JWT token"));
+            return Mono.error(
+                    new UnauthorizedException(ApiErrorMessage.INVALID_TOKEN.getMessage())
+            );
         }
     }
 }

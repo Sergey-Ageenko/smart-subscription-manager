@@ -1,4 +1,4 @@
-package com.ssm.apigateway.filter;
+package com.ssm.apigateway.security.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

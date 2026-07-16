@@ -1,4 +1,5 @@
 package com.ssm.apigateway.service;
 
-public class TokenBlacklistService {
+public interface TokenBlacklistService {
+    boolean isBlacklisted(String token);
 }

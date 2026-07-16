@@ -10,4 +10,5 @@ public interface AuthService {
     TokenResponse login(@NotNull LoginRequest request);
     TokenResponse register(@NotNull RegisterRequest request) throws JsonProcessingException;
     TokenResponse refresh(@NotNull String refreshToken);
+    void logout(@NotNull String accessToken, @NotNull String refreshToken);
 }

@@ -52,7 +52,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         String userId = redisTemplate.opsForValue()
                 .get(ApiConstants.PREFIX_REFRESH + refreshToken);
         if (userId == null) {
-            throw new UnauthorizedException(ApiErrorMessage.TOKEN_EXPIRED.getMessage());
+            throw new UnauthorizedException(ApiErrorMessage.REFRESH_TOKEN_INVALID_OR_EXPIRED.getMessage());
         }
         return UUID.fromString(userId);
     }

@@ -62,4 +62,14 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResponse);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @CookieValue(ApiConstants.REFRESH_TOKEN) String refreshToken,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
+    ) {
+        String accessToken = ApiUtils.extractAccessToken(authorizationHeader);
+        authService.logout(accessToken, refreshToken);
+        return ResponseEntity.ok().build();
+    }
 }
