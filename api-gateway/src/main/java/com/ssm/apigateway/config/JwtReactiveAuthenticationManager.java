@@ -6,6 +6,7 @@ import com.ssm.apigateway.security.JwtTokenProvider;
 import com.ssm.apigateway.service.TokenBlacklistService;
 import com.ssm.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
         String token = authentication.getCredentials().toString();
         if (blacklistService.isBlacklisted(token)) {
             return Mono.error(
-                    new UnauthorizedException(ApiErrorMessage.BLACKLISTED_TOKEN.getMessage())
+                    new BadCredentialsException(ApiErrorMessage.BLACKLISTED_TOKEN.getMessage())
             );
         }
         try {
@@ -40,9 +41,13 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
                     null,
                     jwtTokenProvider.getRoles(claims)
             ));
-        }catch (JwtException e){
+        } catch (ExpiredJwtException e) {
             return Mono.error(
-                    new UnauthorizedException(ApiErrorMessage.INVALID_TOKEN.getMessage())
+                    new BadCredentialsException(ApiErrorMessage.TOKEN_EXPIRED.getMessage())
+            );
+        } catch (JwtException e) {
+            return Mono.error(
+                    new BadCredentialsException(ApiErrorMessage.INVALID_TOKEN.getMessage())
             );
         }
     }

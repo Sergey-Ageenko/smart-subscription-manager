@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ApiErrorMessage {
     INVALID_TOKEN("Token is invalid"),
-    TOKEN_EXPIRED("Token expired."),
+    TOKEN_EXPIRED("Token expired"),
     BLACKLISTED_TOKEN("Token is blacklisted");
 
 

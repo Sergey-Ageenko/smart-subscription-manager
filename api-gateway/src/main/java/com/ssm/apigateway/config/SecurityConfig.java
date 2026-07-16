@@ -14,6 +14,8 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
+import reactor.core.publisher.Mono;
 
 @Configuration
 @RequiredArgsConstructor
@@ -41,9 +43,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationWebFilter jwtAuthenticationWebFilter(JwtReactiveAuthenticationManager authManager, JwtServerAuthenticationConverter converter) {
+    public AuthenticationWebFilter jwtAuthenticationWebFilter(JwtReactiveAuthenticationManager authManager, JwtServerAuthenticationConverter converter, CustomAuthenticationEntryPoint entryPoint) {
         AuthenticationWebFilter filter = new AuthenticationWebFilter(authManager);
         filter.setServerAuthenticationConverter(converter);
+        filter.setRequiresAuthenticationMatcher(
+                exchange -> {
+                    String path = exchange.getRequest().getPath().value();
+                    if (path.startsWith("/api/v1/auth")){
+                        return ServerWebExchangeMatcher.MatchResult.notMatch();
+                    }
+                    return ServerWebExchangeMatcher.MatchResult.match();
+                }
+        );
+        filter.setAuthenticationFailureHandler(
+                (webFilterExchange, exception) ->
+                        entryPoint.commence(
+                                webFilterExchange.getExchange(),
+                                exception
+                        )
+        );
         return filter;
     }
 
