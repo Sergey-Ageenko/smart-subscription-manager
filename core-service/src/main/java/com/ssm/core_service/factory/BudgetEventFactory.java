@@ -18,7 +18,6 @@ public class BudgetEventFactory {
                 budget.getId(),
                 budget.getMonthlyLimit()
         );
-
         return outboxFactory.create(
                 ApiConstants.BUDGET_UPDATED,
                 event

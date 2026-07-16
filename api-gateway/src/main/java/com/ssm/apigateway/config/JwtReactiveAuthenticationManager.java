@@ -1,10 +1,8 @@
 package com.ssm.apigateway.config;
 
-import com.ssm.apigateway.constant.ApiConstants;
 import com.ssm.apigateway.constant.ApiErrorMessage;
 import com.ssm.apigateway.security.JwtTokenProvider;
 import com.ssm.apigateway.service.TokenBlacklistService;
-import com.ssm.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

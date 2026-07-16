@@ -52,6 +52,7 @@ spring:
               uri: http://localhost:8082
               predicates:
                 - Path=/api/v1/**
+              filters:
                 - name: RequestRateLimiter
                   args:
                     key-resolver: "#{@keyResolver}"

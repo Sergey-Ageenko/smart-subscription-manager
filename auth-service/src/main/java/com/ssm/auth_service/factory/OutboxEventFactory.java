@@ -26,7 +26,6 @@ public class OutboxEventFactory {
                     .status(OutboxStatus.NEW)
                     .createdAt(LocalDateTime.now())
                     .build();
-
         } catch (JsonProcessingException e) {
             throw new IllegalStateException(e);
         }
