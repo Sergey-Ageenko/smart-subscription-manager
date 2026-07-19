@@ -56,14 +56,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public TokenResponse login(@NotNull LoginRequest request) {
-        Authentication authentication;
-        try {
-            authentication = manager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw new InvalidDataException(ApiErrorMessage.INVALID_USER_OR_PASSWORD.getMessage());
-        }
+        Authentication authentication = manager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         if (userPrincipal.getStatus() != UserStatus.ACTIVE) {
             throw new UserBlockedException(ApiErrorMessage.USER_IS_BLOCKED.getMessage(userPrincipal.getUsername()));

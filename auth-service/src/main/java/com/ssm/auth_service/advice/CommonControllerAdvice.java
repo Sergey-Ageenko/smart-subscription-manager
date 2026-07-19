@@ -43,7 +43,7 @@ public class CommonControllerAdvice {
                 .body(new ApiError(
                         401,
                         "UNAUTHORIZED",
-                        ex.getMessage(),
+                        ApiErrorMessage.INVALID_USER_OR_PASSWORD.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now(),
                         null
@@ -135,7 +135,7 @@ public class CommonControllerAdvice {
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ApiError(
                         403,
-                        "FORBIDDEN",
+                        "USER_IS_BLOCKED",
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now(),
