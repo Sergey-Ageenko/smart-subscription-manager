@@ -43,6 +43,7 @@ jwt:
 app:
   outbox:
     poll-interval-ms: 5000
+    recovery-interval-ms: 300000
 
 logging:
   level:

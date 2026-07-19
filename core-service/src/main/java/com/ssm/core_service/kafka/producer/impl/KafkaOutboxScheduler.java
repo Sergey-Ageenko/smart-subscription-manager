@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -37,5 +38,12 @@ public class KafkaOutboxScheduler implements OutboxScheduler {
                 outboxService.markFailed(event);
             }
         }
+    }
+
+    @Override
+    @Scheduled(fixedDelayString = "${app.outbox.recovery-interval-ms}")
+    public void recover(){
+        int count = outboxService.recoverStuckEvents(LocalDateTime.now().minusMinutes(10));
+        log.info("Outbox recovery completed. Count={}", count);
     }
 }

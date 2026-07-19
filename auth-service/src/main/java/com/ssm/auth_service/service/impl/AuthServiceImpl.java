@@ -1,9 +1,5 @@
 package com.ssm.auth_service.service.impl;
 
-import com.ssm.auth_service.service.TokenBlacklistService;
-import com.ssm.common.exception.DataExistException;
-import com.ssm.common.exception.InvalidDataException;
-import com.ssm.common.exception.NotFoundException;
 import com.ssm.auth_service.factory.UserEventFactory;
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
 import com.ssm.auth_service.model.entity.OutboxEvent;
@@ -20,12 +16,14 @@ import com.ssm.auth_service.security.JwtTokenProvider;
 import com.ssm.auth_service.security.UserPrincipal;
 import com.ssm.auth_service.service.AuthService;
 import com.ssm.auth_service.service.RefreshTokenService;
+import com.ssm.auth_service.service.TokenBlacklistService;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.NotFoundException;
 import com.ssm.common.exception.UserBlockedException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;

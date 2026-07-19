@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS outbox_events
     status       VARCHAR(20)  NOT NULL,
     retry_count  NUMERIC      DEFAULT 0,
     created_at   TIMESTAMP    NOT NULL,
+    processing_started_at     TIMESTAMP,
     sent_at      TIMESTAMP
 );
 

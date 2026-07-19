@@ -44,4 +44,11 @@ public class OutboxServiceImpl implements OutboxService {
 
         outboxRepository.save(event);
     }
+
+    @Override
+    @Transactional
+    public int recoverStuckEvents(LocalDateTime threshold) {
+        List<OutboxEvent> recovered = outboxRepository.findStuckProcessingEvents(threshold);
+        return recovered.size();
+    }
 }

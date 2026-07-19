@@ -79,21 +79,6 @@ public class CommonControllerAdvice {
                 ));
     }
 
-    @ExceptionHandler(InvalidDataException.class)
-    public ResponseEntity<ApiError> handleInvalidDataException(InvalidDataException ex, HttpServletRequest request) {
-        log.warn("Bad request: {}", ex.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiError(
-                        400,
-                        "BAD_REQUEST",
-                        ex.getMessage(),
-                        request.getRequestURI(),
-                        LocalDateTime.now(),
-                        null
-                ));
-    }
-
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException ex, HttpServletRequest request) {
         log.warn("Unauthorized: {}", ex.getMessage());
