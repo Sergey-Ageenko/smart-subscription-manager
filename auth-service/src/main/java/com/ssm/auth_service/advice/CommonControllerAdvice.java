@@ -2,14 +2,12 @@ package com.ssm.auth_service.advice;
 
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
 import com.ssm.auth_service.utils.ApiError;
-import com.ssm.common.exception.DataExistException;
-import com.ssm.common.exception.InvalidDataException;
-import com.ssm.common.exception.NotFoundException;
-import com.ssm.common.exception.UnauthorizedException;
+import com.ssm.common.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +28,21 @@ public class CommonControllerAdvice {
                 .body(new ApiError(
                         500,
                         "INTERNAL_SERVER_ERROR",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now(),
+                        null
+                ));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        log.warn("Authentication failed: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiError(
+                        401,
+                        "UNAUTHORIZED",
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now(),
@@ -113,5 +126,20 @@ public class CommonControllerAdvice {
         );
         return ResponseEntity.badRequest()
                 .body(apiError);
+    }
+
+    @ExceptionHandler(UserBlockedException.class)
+    public ResponseEntity<ApiError> handleUserBlockedException(UserBlockedException ex, HttpServletRequest request) {
+        log.warn("User blocked: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ApiError(
+                        403,
+                        "FORBIDDEN",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now(),
+                        null
+                ));
     }
 }

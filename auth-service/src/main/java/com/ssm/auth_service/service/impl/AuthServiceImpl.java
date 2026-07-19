@@ -20,6 +20,7 @@ import com.ssm.auth_service.security.JwtTokenProvider;
 import com.ssm.auth_service.security.UserPrincipal;
 import com.ssm.auth_service.service.AuthService;
 import com.ssm.auth_service.service.RefreshTokenService;
+import com.ssm.common.exception.UserBlockedException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
         }
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         if (userPrincipal.getStatus() != UserStatus.ACTIVE) {
-            throw new InvalidDataException(ApiErrorMessage.USER_IS_BLOCKED.getMessage(userPrincipal.getUsername()));
+            throw new UserBlockedException(ApiErrorMessage.USER_IS_BLOCKED.getMessage(userPrincipal.getUsername()));
         }
         String accessToken = tokenProvider.generateToken(userPrincipal);
         String refreshToken = refreshTokenService.create(userPrincipal);
