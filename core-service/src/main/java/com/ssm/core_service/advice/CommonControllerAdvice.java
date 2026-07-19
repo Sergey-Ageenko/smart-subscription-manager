@@ -27,6 +27,20 @@ import java.util.Map;
 @RestControllerAdvice
 public class CommonControllerAdvice {
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleException(Exception ex, HttpServletRequest request) {
+        log.warn("Unexpected error", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiError(
+                        500,
+                        "INTERNAL_SERVER_ERROR",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now(),
+                        null
+                ));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException ex, HttpServletRequest request) {
         log.warn("NotFound: {}", ex.getMessage());

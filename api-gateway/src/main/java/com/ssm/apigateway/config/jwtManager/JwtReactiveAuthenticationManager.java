@@ -1,4 +1,4 @@
-package com.ssm.apigateway.config;
+package com.ssm.apigateway.config.jwtManager;
 
 import com.ssm.apigateway.constant.ApiErrorMessage;
 import com.ssm.apigateway.security.JwtTokenProvider;

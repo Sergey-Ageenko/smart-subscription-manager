@@ -3,6 +3,8 @@ package com.ssm.apigateway.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.ssm.apigateway.config.jwtManager.JwtReactiveAuthenticationManager;
+import com.ssm.apigateway.config.jwtManager.JwtServerAuthenticationConverter;
 import com.ssm.apigateway.security.handler.CustomAccessDeniedHandler;
 import com.ssm.apigateway.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;

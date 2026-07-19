@@ -1,11 +1,11 @@
 package com.ssm.auth_service.advice;
 
 import com.ssm.auth_service.model.constant.ApiErrorMessage;
+import com.ssm.auth_service.utils.ApiError;
 import com.ssm.common.exception.DataExistException;
 import com.ssm.common.exception.InvalidDataException;
 import com.ssm.common.exception.NotFoundException;
 import com.ssm.common.exception.UnauthorizedException;
-import com.ssm.auth_service.utils.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,20 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class CommonControllerAdvice {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleException(Exception ex, HttpServletRequest request) {
+        log.warn("Unexpected error", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiError(
+                        500,
+                        "INTERNAL_SERVER_ERROR",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now(),
+                        null
+                ));
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException ex, HttpServletRequest request) {

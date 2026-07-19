@@ -9,14 +9,18 @@ import java.time.Duration;
 
 public class ApiUtils {
 
+    private static final int tokenBeginIndex = 7;
+    private static final String authPath = "/api/v1/auth";
+    private static final int maxCookieAge = 30;
+
     public static ResponseCookie getCookieWithRefreshToken (String refreshToken){
         return ResponseCookie.from(
                         ApiConstants.REFRESH_TOKEN,
                         refreshToken)
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/v1/auth")
-                .maxAge(Duration.ofDays(30))
+                .path(authPath)
+                .maxAge(Duration.ofDays(maxCookieAge))
                 .build();
     }
 
@@ -24,6 +28,6 @@ public class ApiUtils {
         if (authorizationHeader == null || !authorizationHeader.startsWith(ApiConstants.PREFIX_BEARER)) {
             throw new UnauthorizedException(ApiErrorMessage.INVALID_AUTHORIZATION_HEADER.getMessage());
         }
-        return authorizationHeader.substring(7);
+        return authorizationHeader.substring(tokenBeginIndex);
     }
 }

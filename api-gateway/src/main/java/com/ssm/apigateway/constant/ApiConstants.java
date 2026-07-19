@@ -8,4 +8,5 @@ public class ApiConstants {
     public static final String PREFIX_BLACKLIST = "blacklist:";
     public static final String USER_ROLES = "X-User-Roles";
     public static final String USER_ID = "X-User-Id";
+    public static final String Bearer = "Bearer ";
 }
