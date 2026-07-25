@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record BudgetSettingsUpdatedEvent(
-        UUID budgetId,
-        BigDecimal newMonthlyLimit) implements Serializable {
+        UUID userId,
+        boolean updated) implements Serializable {
 
 }

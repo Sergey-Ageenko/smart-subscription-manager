@@ -1,7 +1,7 @@
 package com.ssm.core_service.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssm.core_service.model.request.userRequest.BudgetUpdateRequest;
+import com.ssm.core_service.model.request.user.BudgetUpdateRequest;
 import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.security.UserPrincipal;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/budgets")
+@RequestMapping("/api/v1/core/budgets")
 public class BudgetController {
 
     private final BudgetService budgetService;
@@ -24,12 +24,12 @@ public class BudgetController {
     @GetMapping
     public ResponseEntity<CoreResponse<BudgetResponse>> getBudget(@AuthenticationPrincipal UserPrincipal principal){
         return ResponseEntity.ok()
-                        .body(budgetService.getBudget(principal.profileId()));
+                        .body(budgetService.getBudget(principal.userId()));
     }
 
     @PutMapping
-    public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal UserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request) throws JsonProcessingException {
+    public ResponseEntity<CoreResponse<BudgetResponse>> update(@AuthenticationPrincipal UserPrincipal principal, @Valid @RequestBody BudgetUpdateRequest request) {
         return ResponseEntity.ok()
-                .body(budgetService.updateBudget(principal.profileId(), request));
+                .body(budgetService.updateBudget(principal.userId(), request));
     }
 }

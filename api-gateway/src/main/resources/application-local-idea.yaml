@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: api-gateway
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          redis-rate-limiter:
+            include-headers: true
+          routes:
+            - id: auth-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@keyResolver}"
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+
+
+            - id: core-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/v1/core/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@keyResolver}"
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+
+            - id: billing-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/v1/billing/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@keyResolver}"
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+
+jwt:
+  secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
+  issuer: "auth-service"
+  audiences: core-service, billing-service

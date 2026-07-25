@@ -1,0 +1,16 @@
+spring:
+
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+jwt:
+  secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
+  issuer: "auth-service"
+  audiences: core-service, billing-service
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

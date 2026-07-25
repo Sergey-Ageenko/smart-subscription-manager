@@ -1,7 +1,7 @@
 package com.ssm.core_service.service;
 
-import com.ssm.core_service.model.request.adminRequest.SubscriptionNewRequest;
-import com.ssm.core_service.model.request.adminRequest.SubscriptionUpdateRequest;
+import com.ssm.core_service.model.request.admin.SubscriptionNewRequest;
+import com.ssm.core_service.model.request.admin.SubscriptionUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.SubscriptionResponse;
 

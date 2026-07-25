@@ -2,14 +2,18 @@ package com.ssm.core_service.service.impl;
 
 import com.ssm.common.exception.DataExistException;
 import com.ssm.common.exception.NotFoundException;
+import com.ssm.core_service.factory.BudgetEventFactory;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
+import com.ssm.core_service.model.entity.OutboxEvent;
 import com.ssm.core_service.model.entity.Profile;
-import com.ssm.core_service.model.request.userRequest.ProfileUpdateRequest;
+import com.ssm.core_service.model.request.user.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.repository.BudgetRepository;
+import com.ssm.core_service.repository.OutboxRepository;
 import com.ssm.core_service.repository.ProfileRepository;
+import com.ssm.core_service.security.UserPrincipal;
 import com.ssm.core_service.service.ProfileService;
 import com.ssm.common.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +32,15 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
     private final BudgetRepository budgetRepository;
+    private final OutboxRepository outboxRepository;
+    private final BudgetEventFactory eventFactory;
 
     @Override
     @Transactional(readOnly = true)
-    public CoreResponse<ProfileResponse> getProfile(UUID profileId) {
-        Profile profile = profileRepository.findById(profileId)
+    public CoreResponse<ProfileResponse> getProfile(UUID userId) {
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND.getMessage(userId)
                 ));
         return CoreResponse.createSuccessful(
                 createResponse(profile)
@@ -58,15 +64,17 @@ public class ProfileServiceImpl implements ProfileService {
                         .monthlyLimit(BigDecimal.ZERO)
                         .profile(savedProfile)
                         .build());
+        OutboxEvent outboxEvent = eventFactory.updated(event.userId());
+        outboxRepository.save(outboxEvent);
         log.info("Profile {} with budget created successfully. Budget id = {}", savedProfile.getId(), budget.getId());
     }
 
     @Override
     @Transactional
-    public CoreResponse<ProfileResponse> updateProfile(UUID profileId, ProfileUpdateRequest request) {
-        Profile profile = profileRepository.findById(profileId)
+    public CoreResponse<ProfileResponse> updateProfile(UUID userId, ProfileUpdateRequest request) {
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND.getMessage(userId)
                 ));
         if (StringUtils.hasText(request.firstName())) {
             profile.setFirstName(request.firstName());
@@ -80,14 +88,6 @@ public class ProfileServiceImpl implements ProfileService {
         );
     }
 
-    @Override
-    public UUID getProfileId(UUID userId) {
-        Profile profile = profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(userId)
-                ));
-        return profile.getId();
-    }
 
     private ProfileResponse createResponse(Profile profile){
         return new ProfileResponse(

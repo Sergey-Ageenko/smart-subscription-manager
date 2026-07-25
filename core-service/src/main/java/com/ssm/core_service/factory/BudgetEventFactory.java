@@ -7,16 +7,17 @@ import com.ssm.common.event.BudgetSettingsUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class BudgetEventFactory {
 
     private final OutboxEventFactory outboxFactory;
 
-    public OutboxEvent updated(Budget budget) {
+    public OutboxEvent updated(UUID userId) {
         BudgetSettingsUpdatedEvent event = new BudgetSettingsUpdatedEvent(
-                budget.getId(),
-                budget.getMonthlyLimit()
+                userId, true
         );
         return outboxFactory.create(
                 ApiConstants.BUDGET_UPDATED,

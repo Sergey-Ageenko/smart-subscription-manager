@@ -11,7 +11,6 @@ allprojects {
     ext {
         jjwtVersion = '0.13.0'
         postgresqlVersion = '42.7.11'
-        mapstructVersion = '1.6.3'
     }
 
 

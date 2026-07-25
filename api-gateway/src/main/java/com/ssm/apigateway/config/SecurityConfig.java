@@ -1,8 +1,6 @@
 package com.ssm.apigateway.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssm.apigateway.config.jwtManager.JwtReactiveAuthenticationManager;
 import com.ssm.apigateway.config.jwtManager.JwtServerAuthenticationConverter;
 import com.ssm.apigateway.security.handler.CustomAccessDeniedHandler;
@@ -23,6 +21,8 @@ import org.springframework.security.web.server.util.matcher.ServerWebExchangeMat
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    private final ObjectMapper objectMapper;
+
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, AuthenticationWebFilter jwtAuthenticationWebFilter) {
 
@@ -33,8 +33,8 @@ public class SecurityConfig {
                         .anyExchange().authenticated()
                 )
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper()))
-                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper()))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
@@ -64,14 +64,6 @@ public class SecurityConfig {
                         )
         );
         return filter;
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return mapper;
     }
 }
 

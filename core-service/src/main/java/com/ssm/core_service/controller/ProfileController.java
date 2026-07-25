@@ -1,6 +1,6 @@
 package com.ssm.core_service.controller;
 
-import com.ssm.core_service.model.request.userRequest.ProfileUpdateRequest;
+import com.ssm.core_service.model.request.user.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.security.UserPrincipal;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/profiles")
+@RequestMapping("/api/v1/core/profiles")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -24,21 +24,21 @@ public class ProfileController {
     @GetMapping("/me")
     public ResponseEntity<CoreResponse<ProfileResponse>> getProfile(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok()
-                .body(profileService.getProfile(principal.profileId()));
+                .body(profileService.getProfile(principal.userId()));
     }
 
     @PatchMapping("/me")
     public ResponseEntity<CoreResponse<ProfileResponse>> updateProfile(@AuthenticationPrincipal UserPrincipal principal,
                                                                        @Valid @RequestBody ProfileUpdateRequest request) {
         return ResponseEntity.ok()
-                .body(profileService.updateProfile(principal.profileId(), request));
+                .body(profileService.updateProfile(principal.userId(), request));
     }
 
     @GetMapping("/test/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> testAdminRole(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok()
-                .body("ADMIN ID: " + principal.profileId());
+                .body("ADMIN ID: " + principal.userId());
     }
 
 }

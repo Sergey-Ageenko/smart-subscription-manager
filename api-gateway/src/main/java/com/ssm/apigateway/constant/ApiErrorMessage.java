@@ -9,8 +9,9 @@ import lombok.Getter;
 public enum ApiErrorMessage {
     INVALID_TOKEN("Token is invalid"),
     TOKEN_EXPIRED("Token expired"),
-    BLACKLISTED_TOKEN("Token is blacklisted");
-
+    BLACKLISTED_TOKEN("Token is blacklisted"),
+    JWT_AUDIENCE_IS_MISSING("JWT audience is missing"),
+    INVALID_AUDIENCE("Invalid JWT audience");
 
     private final String message;
 

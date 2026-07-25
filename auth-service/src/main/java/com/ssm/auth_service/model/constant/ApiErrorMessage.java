@@ -11,7 +11,6 @@ public enum ApiErrorMessage {
     USER_NOT_FOUND_BY_ID("User with id: %s was not found"),
     USER_WITH_USERNAME_ALREADY_EXISTS("User with username: '%s' already exists"),
     ROLE_NOT_FOUND("Role with name: '%s' not found"),
-    INVALID_TOKEN("Token is invalid"),
     REFRESH_TOKEN_INVALID_OR_EXPIRED("Refresh token is invalid or expired"),
     INVALID_USER_OR_PASSWORD("Invalid username or password. Try again"),
     USER_IS_BLOCKED("User with username: %s is blocked"),

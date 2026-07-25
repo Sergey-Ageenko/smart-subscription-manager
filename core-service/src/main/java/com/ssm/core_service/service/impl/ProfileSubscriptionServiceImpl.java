@@ -8,12 +8,11 @@ import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.OutboxEvent;
 import com.ssm.core_service.model.entity.Profile;
 import com.ssm.core_service.model.entity.Subscription;
-import com.ssm.core_service.model.entity.profileSubscription.ProfileSubscription;
-import com.ssm.core_service.model.entity.profileSubscription.ProfileSubscriptionId;
+import com.ssm.core_service.model.entity.ProfileSubscription;
 import com.ssm.core_service.model.enums.BillingPeriod;
 import com.ssm.core_service.model.enums.SubscriptionStatus;
-import com.ssm.core_service.model.request.userRequest.ProfileSubscriptionAddRequest;
-import com.ssm.core_service.model.request.userRequest.ProfileSubscriptionUpdateRequest;
+import com.ssm.core_service.model.request.user.ProfileSubscriptionAddRequest;
+import com.ssm.core_service.model.request.user.ProfileSubscriptionUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileSubscriptionResponse;
 import com.ssm.core_service.repository.OutboxRepository;
@@ -44,9 +43,9 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
 
     @Override
     @Transactional(readOnly = true)
-    public CoreResponse<List<ProfileSubscriptionResponse>> getAllSubscriptions(UUID profileId) {
+    public CoreResponse<List<ProfileSubscriptionResponse>> getAllSubscriptions(UUID userId) {
         List<ProfileSubscriptionResponse> responses = profileSubscriptionRepository
-                .findAllByProfile_Id(profileId)
+                .findAllByProfile_UserId(userId)
                 .stream()
                 .map(this::createResponse)
                 .toList();
@@ -55,28 +54,23 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
 
     @Override
     @Transactional(readOnly = true)
-    public CoreResponse<ProfileSubscriptionResponse> getSubscription(UUID profileId, UUID subId) {
-        ProfileSubscription profileSubscription = profileSubscriptionRepository.findById(
-                        ProfileSubscriptionId.builder()
-                                .profileId(profileId)
-                                .subscriptionId(subId)
-                                .build()
-                )
+    public CoreResponse<ProfileSubscriptionResponse> getSubscription(UUID userId, UUID subId) {
+        ProfileSubscription profileSubscription = profileSubscriptionRepository.findByProfile_UserIdAndSubscription_Id(userId, subId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND.getMessage(userId, subId)
                 ));
         return CoreResponse.createSuccessful(createResponse(profileSubscription));
     }
 
     @Override
     @Transactional
-    public CoreResponse<ProfileSubscriptionResponse> addSubscription(UUID profileId, UUID subId, ProfileSubscriptionAddRequest request) {
-        if (profileSubscriptionRepository.existsById_SubscriptionId(subId)){
-            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_EXISTS.getMessage(subId));
+    public CoreResponse<ProfileSubscriptionResponse> addSubscription(UUID userId, UUID subId, ProfileSubscriptionAddRequest request) {
+        if (profileSubscriptionRepository.existsByProfile_UserIdAndSubscription_Id(userId, subId)){
+            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_EXISTS.getMessage(userId, subId));
         }
-        Profile profile = profileRepository.findById(profileId)
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_PROFILE_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_PROFILE_NOT_FOUND.getMessage(userId)
                 ));
         Subscription subscription = subscriptionRepository.findById(subId)
                 .orElseThrow(() -> new NotFoundException(
@@ -85,22 +79,23 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
         ProfileSubscription savedProfileSubscription = profileSubscriptionRepository.save(
                 createProfileSubscription(profile, subscription,
                         request.price(),
-                        request.billingPeriod())
+                        request.billingPeriod()
+                        )
         );
-        OutboxEvent event = subscriptionEventFactory.created(savedProfileSubscription);
+        OutboxEvent event = subscriptionEventFactory.created(userId);
         outboxRepository.save(event);
-        log.info("Subscription {} added successfully to profile {}.",
+        log.info("Subscription {} added successfully to user {}.",
                 savedProfileSubscription.getSubscription().getId(),
-                savedProfileSubscription.getProfile().getId());
+                savedProfileSubscription.getProfile().getUserId());
         return CoreResponse.createSuccessful(createResponse(savedProfileSubscription));
     }
 
     @Override
     @Transactional
-    public CoreResponse<ProfileSubscriptionResponse> updateSubscription(UUID profileId, UUID subId, ProfileSubscriptionUpdateRequest request) {
-        ProfileSubscription updatedProfileSubscription = profileSubscriptionRepository.findById_ProfileIdAndSubscriptionId(profileId, subId)
+    public CoreResponse<ProfileSubscriptionResponse> updateSubscription(UUID userId, UUID subId, ProfileSubscriptionUpdateRequest request) {
+        ProfileSubscription updatedProfileSubscription = profileSubscriptionRepository.findByProfile_UserIdAndSubscription_Id(userId, subId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND.getMessage(userId, subId)
                 ));
         boolean financialDataChanged = false;
         if (request.price() != null && request.price().compareTo(BigDecimal.ZERO) > 0 &&
@@ -114,45 +109,45 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
             financialDataChanged = true;
         }
         if (financialDataChanged){
-            OutboxEvent event = subscriptionEventFactory.updated(updatedProfileSubscription);
+            OutboxEvent event = subscriptionEventFactory.updated(userId);
             outboxRepository.save(event);
         }
-        log.info("Subscription {} updated successfully from profile {}.",
+        log.info("Subscription {} updated successfully from user {}.",
                 updatedProfileSubscription.getSubscription().getId(),
-                updatedProfileSubscription.getProfile().getId());
+                updatedProfileSubscription.getProfile().getUserId());
         return CoreResponse.createSuccessful(createResponse(updatedProfileSubscription));
     }
 
     @Override
     @Transactional
-    public CoreResponse<ProfileSubscriptionResponse> cancelSubscription(UUID profileId, UUID subId) {
-        ProfileSubscription cancelledProfileSubscription = profileSubscriptionRepository.findById_ProfileIdAndSubscriptionId(profileId, subId)
+    public CoreResponse<ProfileSubscriptionResponse> cancelSubscription(UUID userId, UUID subId) {
+        ProfileSubscription cancelledProfileSubscription = profileSubscriptionRepository.findByProfile_UserIdAndSubscription_Id(userId, subId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND.getMessage(userId, subId)
                 ));
         if (cancelledProfileSubscription.getStatus() != SubscriptionStatus.ACTIVE) {
-            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_CANCELLED.getMessage(subId));
+            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_CANCELLED.getMessage(userId, subId));
         }
         cancelledProfileSubscription.setStatus(SubscriptionStatus.CANCELLED);
-        OutboxEvent event = subscriptionEventFactory.cancelled(cancelledProfileSubscription);
+        OutboxEvent event = subscriptionEventFactory.cancelled(userId);
         outboxRepository.save(event);
-        log.info("Subscription {} cancelled successfully from profile {}.",
+        log.info("Subscription {} cancelled successfully from user {}.",
                 cancelledProfileSubscription.getSubscription().getId(),
-                cancelledProfileSubscription.getProfile().getId());
+                cancelledProfileSubscription.getProfile().getUserId());
         return CoreResponse.createSuccessful(createResponse(cancelledProfileSubscription));
     }
 
     @Override
     @Transactional
-    public CoreResponse<ProfileSubscriptionResponse> deleteSubscription(UUID profileId, UUID subId) {
-        ProfileSubscription deletedProfileSubscription = profileSubscriptionRepository.findById_ProfileIdAndSubscriptionId(profileId, subId)
+    public CoreResponse<ProfileSubscriptionResponse> deleteSubscription(UUID userId, UUID subId) {
+        ProfileSubscription deletedProfileSubscription = profileSubscriptionRepository.findByProfile_UserIdAndSubscription_Id(userId, subId)
                 .orElseThrow(() -> new NotFoundException(
-                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND_BY_ID.getMessage(profileId)
+                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND.getMessage(userId, subId)
                 ));
         profileSubscriptionRepository.delete(deletedProfileSubscription);
-        log.info("Subscription {} deleted successfully from profile {}.",
+        log.info("Subscription {} deleted successfully from user {}.",
                 deletedProfileSubscription.getSubscription().getId(),
-                deletedProfileSubscription.getProfile().getId());
+                deletedProfileSubscription.getProfile().getUserId());
         return CoreResponse.createSuccessful(createResponse(deletedProfileSubscription));
     }
 
@@ -161,12 +156,7 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
                                                           Subscription subscription,
                                                           BigDecimal price,
                                                           BillingPeriod billingPeriod) {
-        ProfileSubscriptionId profileSubscriptionId = ProfileSubscriptionId.builder()
-                .profileId(profile.getId())
-                .subscriptionId(subscription.getId())
-                .build();
         return ProfileSubscription.builder()
-                .id(profileSubscriptionId)
                 .profile(profile)
                 .subscription(subscription)
                 .price(price)

@@ -29,6 +29,9 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final ObjectMapper objectMapper;
+
     private static final PathPatternRequestMatcher[] NOT_SECURED_URLS = new PathPatternRequestMatcher[]{
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/login"),
             PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/register"),
@@ -52,8 +55,8 @@ public class SecurityConfig {
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
                         .anyRequest().denyAll())
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper()))
-                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper()))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
                 );
         return http.build();
     }
@@ -68,13 +71,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return mapper;
     }
 }

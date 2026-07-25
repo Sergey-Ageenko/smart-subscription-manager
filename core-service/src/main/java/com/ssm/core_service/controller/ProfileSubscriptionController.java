@@ -1,7 +1,7 @@
 package com.ssm.core_service.controller;
 
-import com.ssm.core_service.model.request.userRequest.ProfileSubscriptionAddRequest;
-import com.ssm.core_service.model.request.userRequest.ProfileSubscriptionUpdateRequest;
+import com.ssm.core_service.model.request.user.ProfileSubscriptionAddRequest;
+import com.ssm.core_service.model.request.user.ProfileSubscriptionUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileSubscriptionResponse;
 import com.ssm.core_service.security.UserPrincipal;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/profile/subscriptions")
+@RequestMapping("/api/v1/core/profile/subscriptions")
 public class ProfileSubscriptionController {
 
     private final ProfileSubscriptionService profileSubscriptionService;
@@ -27,14 +27,14 @@ public class ProfileSubscriptionController {
     @GetMapping
     public ResponseEntity<CoreResponse<List<ProfileSubscriptionResponse>>> getAllSubscriptions(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok()
-                .body(profileSubscriptionService.getAllSubscriptions(principal.profileId()));
+                .body(profileSubscriptionService.getAllSubscriptions(principal.userId()));
     }
 
     @GetMapping("/{subscriptionId}")
     public ResponseEntity<CoreResponse<ProfileSubscriptionResponse>> getSubscription(@AuthenticationPrincipal UserPrincipal principal,
                                                                                      @PathVariable UUID subscriptionId) {
         return ResponseEntity.ok()
-                .body(profileSubscriptionService.getSubscription(principal.profileId(), subscriptionId));
+                .body(profileSubscriptionService.getSubscription(principal.userId(), subscriptionId));
     }
 
     @PostMapping("/{subscriptionId}")
@@ -42,7 +42,7 @@ public class ProfileSubscriptionController {
                                                                                      @PathVariable UUID subscriptionId,
                                                                                      @Valid @RequestBody ProfileSubscriptionAddRequest request) {
         return ResponseEntity.ok()
-                .body(profileSubscriptionService.addSubscription(principal.profileId(), subscriptionId, request));
+                .body(profileSubscriptionService.addSubscription(principal.userId(), subscriptionId, request));
     }
 
     @PatchMapping("/{subscriptionId}/update")
@@ -50,21 +50,21 @@ public class ProfileSubscriptionController {
                                                                                         @PathVariable UUID subscriptionId,
                                                                                         @Valid @RequestBody ProfileSubscriptionUpdateRequest request) {
         return ResponseEntity.ok()
-                .body(profileSubscriptionService.updateSubscription(principal.profileId(), subscriptionId, request));
+                .body(profileSubscriptionService.updateSubscription(principal.userId(), subscriptionId, request));
     }
 
     @PatchMapping("/{subscriptionId}/cancel")
     public ResponseEntity<CoreResponse<ProfileSubscriptionResponse>> cancelSubscription(@AuthenticationPrincipal UserPrincipal principal,
                                                                                  @PathVariable UUID subscriptionId) {
         return ResponseEntity.ok()
-                .body(profileSubscriptionService.cancelSubscription(principal.profileId(), subscriptionId));
+                .body(profileSubscriptionService.cancelSubscription(principal.userId(), subscriptionId));
     }
 
     @DeleteMapping("/{subscriptionId}")
     public ResponseEntity<CoreResponse<ProfileSubscriptionResponse>> deleteSubscription(@AuthenticationPrincipal UserPrincipal principal,
                                                                                         @PathVariable UUID subscriptionId) {
         return ResponseEntity.ok()
-                .body(profileSubscriptionService.deleteSubscription(principal.profileId(), subscriptionId));
+                .body(profileSubscriptionService.deleteSubscription(principal.userId(), subscriptionId));
     }
 
 }

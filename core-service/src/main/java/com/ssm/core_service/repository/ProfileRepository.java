@@ -1,13 +1,13 @@
 package com.ssm.core_service.repository;
 
 import com.ssm.core_service.model.entity.Profile;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface ProfileRepository extends JpaRepository<Profile, UUID> {
-    Optional<Profile> findByUserId(UUID userId);
-
-    boolean existsByUserId(UUID userId);
+    Optional<Profile> findByUserId(@NotNull UUID userId);
+    boolean existsByUserId(@NotNull UUID userId);
 }

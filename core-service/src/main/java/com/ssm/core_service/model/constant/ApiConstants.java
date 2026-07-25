@@ -12,4 +12,6 @@ public class ApiConstants {
     public static final String SUBSCRIPTION_CREATED = "subscription-created";
     public static final String SUBSCRIPTION_CANCELLED = "subscription-cancelled";
     public static final String SUBSCRIPTION_UPDATED = "subscription-updated";
+    public static final String SERVICE_NAME = "X-Service-Name";
+    public static final String BILLING_SERVICE = "billing-service";
 }

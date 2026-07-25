@@ -1,7 +1,7 @@
 package com.ssm.core_service.controller;
 
-import com.ssm.core_service.model.request.adminRequest.SubscriptionNewRequest;
-import com.ssm.core_service.model.request.adminRequest.SubscriptionUpdateRequest;
+import com.ssm.core_service.model.request.admin.SubscriptionNewRequest;
+import com.ssm.core_service.model.request.admin.SubscriptionUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.SubscriptionResponse;
 import com.ssm.core_service.service.SubscriptionService;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/subscriptions")
+@RequestMapping("/api/v1/core/subscriptions")
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;

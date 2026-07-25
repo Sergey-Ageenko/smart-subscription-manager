@@ -28,14 +28,10 @@ spring:
     enabled: true
     schemas: core_service
 
-jwt:
-  secret: ${JWT_SECRET}
-  issuer: ${JWT_ISSUER}
-  audience: ${JWT_AUDIENCE}
-
 app:
   outbox:
     poll-interval-ms: ${POLL_INTERVAL_MS}
+    recovery-interval-ms: ${RECOVERY_INTERVAL_MS}
 
 logging:
   level:

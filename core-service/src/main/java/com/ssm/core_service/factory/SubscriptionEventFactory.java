@@ -2,12 +2,13 @@ package com.ssm.core_service.factory;
 
 import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.model.entity.OutboxEvent;
-import com.ssm.core_service.model.entity.profileSubscription.ProfileSubscription;
 import com.ssm.common.event.SubscriptionCancelledEvent;
 import com.ssm.common.event.SubscriptionCreatedEvent;
 import com.ssm.common.event.SubscriptionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -15,12 +16,10 @@ public class SubscriptionEventFactory {
 
     private final OutboxEventFactory outboxFactory;
 
-    public OutboxEvent created(ProfileSubscription subscription) {
+    public OutboxEvent created(UUID userId) {
         SubscriptionCreatedEvent event =
                 new SubscriptionCreatedEvent(
-                        subscription.getSubscription().getId(),
-                        subscription.getPrice(),
-                        subscription.getBillingPeriod().name()
+                        userId, true
                 );
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_CREATED,
@@ -28,12 +27,10 @@ public class SubscriptionEventFactory {
         );
     }
 
-    public OutboxEvent updated(ProfileSubscription subscription) {
+    public OutboxEvent updated(UUID userId) {
         SubscriptionUpdatedEvent event =
                 new SubscriptionUpdatedEvent(
-                        subscription.getSubscription().getId(),
-                        subscription.getPrice(),
-                        subscription.getBillingPeriod().name()
+                        userId, true
                 );
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_UPDATED,
@@ -41,11 +38,10 @@ public class SubscriptionEventFactory {
         );
     }
 
-    public OutboxEvent cancelled(ProfileSubscription subscription) {
+    public OutboxEvent cancelled(UUID userId) {
         SubscriptionCancelledEvent event =
                 new SubscriptionCancelledEvent(
-                        subscription.getSubscription().getId(),
-                        subscription.getStatus().name()
+                        userId, true
                 );
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_CANCELLED,

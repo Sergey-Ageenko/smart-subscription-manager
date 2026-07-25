@@ -30,12 +30,12 @@ public interface OutboxRepository extends JpaRepository<OutboxEvent, UUID> {
 
     @Modifying
     @Query(value = """
-                UPDATE auth_service.outbox_events
+                UPDATE core_service.outbox_events
                 SET status = 'NEW',
                     processing_started_at = NULL
                 WHERE id IN (
                     SELECT id
-                    FROM auth_service.outbox_events
+                    FROM core_service.outbox_events
                     WHERE status = 'PROCESSING'
                     AND processing_started_at < :threshold
                     ORDER BY processing_started_at

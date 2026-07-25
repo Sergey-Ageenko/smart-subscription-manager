@@ -1,8 +1,6 @@
 package com.ssm.core_service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssm.core_service.security.filter.GatewayAuthenticationFilter;
 import com.ssm.core_service.security.handler.CustomAccessDeniedHandler;
 import com.ssm.core_service.security.handler.CustomAuthenticationEntryPoint;
@@ -28,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final GatewayAuthenticationFilter gatewayAuthenticationFilter;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,8 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper()))
-                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper()))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
                 ).addFilterBefore(gatewayAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -49,14 +48,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return mapper;
     }
 
 }

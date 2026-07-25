@@ -34,14 +34,10 @@ spring:
       properties:
         spring.json.trusted.packages: "com.ssm.events"
 
-jwt:
-  secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
-  issuer: "auth-service"
-  audience: "core-service"
-
 app:
   outbox:
     poll-interval-ms: 5000
+    recovery-interval-ms: 300000
 
 logging:
   level:

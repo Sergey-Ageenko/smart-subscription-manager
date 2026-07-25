@@ -30,24 +30,34 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GatewayAuthenticationFilter extends OncePerRequestFilter {
 
-    private final ProfileService profileService;
-
     @Override
     protected void doFilterInternal(
             @NotNull HttpServletRequest request,
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
+        String internalRequest = request.getHeader(ApiConstants.SERVICE_NAME);
+        if (ApiConstants.BILLING_SERVICE.equals(internalRequest)) {
+            UUID userId = UUID.fromString(request.getHeader(ApiConstants.USER_ID));
+            Authentication auth =
+                    new UsernamePasswordAuthenticationToken(
+                            new UserPrincipal(userId),
+                            null,
+                            null
+                    );
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            filterChain.doFilter(request, response);
+            return;
+        }
         UUID userId = UUID.fromString(request.getHeader(ApiConstants.USER_ID));
         String roles = request.getHeader(ApiConstants.USER_ROLES);
         try {
-            UUID profileId = profileService.getProfileId(userId);
             List<SimpleGrantedAuthority> authorities = Arrays.stream(roles.split(","))
                     .map(SimpleGrantedAuthority::new)
                     .toList();
             Authentication auth =
                     new UsernamePasswordAuthenticationToken(
-                            new UserPrincipal(profileId),
+                            new UserPrincipal(userId),
                             null,
                             authorities
                     );

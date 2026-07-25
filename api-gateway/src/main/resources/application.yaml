@@ -3,68 +3,6 @@ server:
 
 
 spring:
-
   application:
     name: api-gateway
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-  cloud:
-    gateway:
-      server:
-        webflux:
-          redis-rate-limiter:
-            include-headers: true
-          routes:
-            - id: auth-login
-              uri: http://localhost:8081
-              predicates:
-                - Path=/api/v1/auth/login
-                - Method=POST
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    key-resolver: "#{@keyResolver}"
-                    redis-rate-limiter.replenishRate: 1
-                    redis-rate-limiter.burstCapacity: 5
-
-            - id: auth-register
-              uri: http://localhost:8081
-              predicates:
-                - Path=/api/v1/auth/login
-                - Method=POST
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    key-resolver: "#{@keyResolver}"
-                    redis-rate-limiter.replenishRate: 1
-                    redis-rate-limiter.burstCapacity: 3
-
-            - id: auth-service
-              uri: http://localhost:8081
-              predicates:
-                - Path=/api/v1/auth/**
-
-            - id: core-service
-              uri: http://localhost:8082
-              predicates:
-                - Path=/api/v1/**
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    key-resolver: "#{@keyResolver}"
-                    redis-rate-limiter.replenishRate: 10
-                    redis-rate-limiter.burstCapacity: 20
-
-jwt:
-  secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
-  issuer: "auth-service"
-  audience: "core-service"
-
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
