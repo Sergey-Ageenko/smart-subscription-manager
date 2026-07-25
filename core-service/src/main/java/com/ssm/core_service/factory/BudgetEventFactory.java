@@ -1,7 +1,6 @@
 package com.ssm.core_service.factory;
 
 import com.ssm.core_service.model.constant.ApiConstants;
-import com.ssm.core_service.model.entity.Budget;
 import com.ssm.core_service.model.entity.OutboxEvent;
 import com.ssm.common.event.BudgetSettingsUpdatedEvent;
 import lombok.RequiredArgsConstructor;

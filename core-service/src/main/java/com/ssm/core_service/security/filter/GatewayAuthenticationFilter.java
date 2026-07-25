@@ -4,7 +4,6 @@ import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.common.exception.UnauthorizedException;
 import com.ssm.core_service.security.UserPrincipal;
-import com.ssm.core_service.service.ProfileService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

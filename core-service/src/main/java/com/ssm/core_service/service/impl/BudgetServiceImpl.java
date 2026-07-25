@@ -10,7 +10,6 @@ import com.ssm.core_service.model.response.BudgetResponse;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.repository.BudgetRepository;
 import com.ssm.core_service.repository.OutboxRepository;
-import com.ssm.core_service.security.UserPrincipal;
 import com.ssm.core_service.service.BudgetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

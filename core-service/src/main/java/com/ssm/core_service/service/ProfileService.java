@@ -4,7 +4,6 @@ import com.ssm.core_service.model.request.user.ProfileUpdateRequest;
 import com.ssm.core_service.model.response.CoreResponse;
 import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.common.event.UserRegisteredEvent;
-import com.ssm.core_service.security.UserPrincipal;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;

@@ -1,8 +1,6 @@
 package com.ssm.auth_service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssm.auth_service.security.handler.CustomAccessDeniedHandler;
 import com.ssm.auth_service.security.handler.CustomAuthenticationEntryPoint;
 import com.ssm.auth_service.service.UserService;

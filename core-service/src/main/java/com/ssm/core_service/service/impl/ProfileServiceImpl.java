@@ -13,7 +13,6 @@ import com.ssm.core_service.model.response.ProfileResponse;
 import com.ssm.core_service.repository.BudgetRepository;
 import com.ssm.core_service.repository.OutboxRepository;
 import com.ssm.core_service.repository.ProfileRepository;
-import com.ssm.core_service.security.UserPrincipal;
 import com.ssm.core_service.service.ProfileService;
 import com.ssm.common.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;

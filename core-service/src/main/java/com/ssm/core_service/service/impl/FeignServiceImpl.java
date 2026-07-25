@@ -4,7 +4,6 @@ import com.ssm.common.exception.NotFoundException;
 import com.ssm.core_service.model.constant.ApiErrorMessage;
 import com.ssm.core_service.model.entity.Budget;
 import com.ssm.core_service.model.enums.SubscriptionStatus;
-import com.ssm.core_service.model.response.ProfileSubscriptionResponse;
 import com.ssm.core_service.model.response.feign.BillingBudgetSettingsResponse;
 import com.ssm.core_service.model.response.feign.BillingProfileSubscriptionResponse;
 import com.ssm.core_service.repository.BudgetRepository;
