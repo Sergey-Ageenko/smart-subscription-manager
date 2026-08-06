@@ -1,5 +1,7 @@
 package com.ssm.apigateway.service;
 
+import reactor.core.publisher.Mono;
+
 public interface TokenBlacklistService {
-    boolean isBlacklisted(String token);
+    Mono<Boolean> isBlacklisted(String token);
 }

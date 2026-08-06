@@ -3,18 +3,20 @@ package com.ssm.apigateway.service.impl;
 import com.ssm.apigateway.constant.ApiConstants;
 import com.ssm.apigateway.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class TokenBlacklistServiceImpl implements TokenBlacklistService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
 
     @Override
-    public boolean isBlacklisted(String token) {
-        return redisTemplate.hasKey(
+    public Mono<Boolean> isBlacklisted(String token) {
+        return reactiveRedisTemplate.hasKey(
                 ApiConstants.PREFIX_BLACKLIST + token
         );
     }

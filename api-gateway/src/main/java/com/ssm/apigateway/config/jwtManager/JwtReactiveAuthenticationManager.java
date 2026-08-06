@@ -27,26 +27,31 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
     public Mono<Authentication> authenticate(Authentication authentication) {
         log.info("JWT AUTH MANAGER CALLED");
         String token = authentication.getCredentials().toString();
-        if (blacklistService.isBlacklisted(token)) {
-            return Mono.error(
-                    new BadCredentialsException(ApiErrorMessage.BLACKLISTED_TOKEN.getMessage())
-            );
-        }
-        try {
-            Claims claims = jwtTokenProvider.extractAllClaims(token);
-            return Mono.just(new UsernamePasswordAuthenticationToken(
-                    jwtTokenProvider.getUserId(claims),
-                    null,
-                    jwtTokenProvider.getRoles(claims)
-            ));
-        } catch (ExpiredJwtException e) {
-            return Mono.error(
-                    new BadCredentialsException(ApiErrorMessage.TOKEN_EXPIRED.getMessage())
-            );
-        } catch (JwtException e) {
-            return Mono.error(
-                    new BadCredentialsException(ApiErrorMessage.INVALID_TOKEN.getMessage())
-            );
-        }
+        return blacklistService.isBlacklisted(token)
+                .flatMap(isBlacklisted -> {
+                    if (isBlacklisted) {
+                        return Mono.error(
+                                new BadCredentialsException(ApiErrorMessage.BLACKLISTED_TOKEN.getMessage())
+                        );
+                    }
+                    try {
+                        Claims claims = jwtTokenProvider.extractAllClaims(token);
+                        Authentication result =
+                                new UsernamePasswordAuthenticationToken(
+                                        jwtTokenProvider.getUserId(claims),
+                                        null,
+                                        jwtTokenProvider.getRoles(claims)
+                                );
+                        return Mono.just(result);
+                    } catch (ExpiredJwtException e) {
+                        return Mono.error(
+                                new BadCredentialsException(ApiErrorMessage.TOKEN_EXPIRED.getMessage())
+                        );
+                    } catch (JwtException e) {
+                        return Mono.error(
+                                new BadCredentialsException(ApiErrorMessage.INVALID_TOKEN.getMessage())
+                        );
+                    }
+                });
     }
 }
