@@ -15,7 +15,8 @@ public interface OutboxRepository extends JpaRepository<OutboxEvent, UUID> {
     @Modifying
     @Query(value = """
                 UPDATE core_service.outbox_events
-                SET status = 'PROCESSING'
+                SET status = 'PROCESSING',
+                    processing_started_at = NOW()
                 WHERE id IN (
                     SELECT id
                     FROM core_service.outbox_events

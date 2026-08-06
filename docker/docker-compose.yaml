@@ -1,10 +1,11 @@
-version: '3.8'
 
 services:
   api-gateway:
     build:
-      context: ../api-gateway
+      context: ..
       dockerfile: docker/Dockerfile
+      args:
+        MODULE: api-gateway
     container_name: api-gateway
     ports:
       - "8080:8080"
@@ -24,11 +25,13 @@ services:
 
   auth-service:
     build:
-      context: ../auth-service
+      context: ..
       dockerfile: docker/Dockerfile
+      args:
+        MODULE: auth-service
     container_name: auth-service
     ports:
-      - "8081:8081"
+      - "8081"
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${AUTH_DB}
@@ -49,11 +52,13 @@ services:
 
   core-service:
     build:
-      context: ../core-service
+      context: ..
       dockerfile: docker/Dockerfile
+      args:
+        MODULE: core-service
     container_name: core-service
     ports:
-      - "8082:8082"
+      - "8082"
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${CORE_DB}
@@ -69,11 +74,13 @@ services:
 
   billing-service:
     build:
-      context: ../billing-service
+      context: ..
       dockerfile: docker/Dockerfile
+      args:
+        MODULE: billing-service
     container_name: billing-service
     ports:
-      - "8083:8083"
+      - "8083"
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${BILLING_DB}
