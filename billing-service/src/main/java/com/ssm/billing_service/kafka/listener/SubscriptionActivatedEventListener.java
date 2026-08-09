@@ -7,7 +7,6 @@ import com.ssm.billing_service.model.entity.ProcessedEvent;
 import com.ssm.billing_service.service.ForecastService;
 import com.ssm.billing_service.service.ProcessedEventService;
 import com.ssm.common.event.SubscriptionActivatedEvent;
-import com.ssm.common.event.SubscriptionCancelledEvent;
 import com.ssm.common.exception.DuplicateEventException;
 import com.ssm.common.exception.RetryableException;
 import lombok.RequiredArgsConstructor;
