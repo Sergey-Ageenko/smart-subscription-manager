@@ -3,7 +3,6 @@ package com.ssm.core_service.kafka.listener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.common.exception.DuplicateEventException;
-import com.ssm.common.exception.RetryableException;
 import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.model.entity.ProcessedEvent;
 import com.ssm.core_service.service.ProcessedEventService;
@@ -50,14 +49,6 @@ public class UserRegisteredEventListener {
             profileService.createProfile(event);
         } catch (DuplicateEventException e) {
             log.debug("Duplicate message {}", record.key());
-
-        } catch (RetryableException e) {
-            log.warn("Retryable error", e);
-            throw e;
-
-        } catch (Exception e) {
-            log.error("Unexpected error", e);
-            throw e;
         }
     }
 }

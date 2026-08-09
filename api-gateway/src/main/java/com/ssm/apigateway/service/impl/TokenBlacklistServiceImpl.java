@@ -4,7 +4,6 @@ import com.ssm.apigateway.constant.ApiConstants;
 import com.ssm.apigateway.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

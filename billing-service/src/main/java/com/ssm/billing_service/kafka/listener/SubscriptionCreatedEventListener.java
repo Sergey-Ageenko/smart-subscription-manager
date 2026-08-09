@@ -8,7 +8,6 @@ import com.ssm.billing_service.service.ForecastService;
 import com.ssm.billing_service.service.ProcessedEventService;
 import com.ssm.common.event.SubscriptionCreatedEvent;
 import com.ssm.common.exception.DuplicateEventException;
-import com.ssm.common.exception.RetryableException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -50,14 +49,6 @@ public class SubscriptionCreatedEventListener {
             forecastService.calculateForecast(event.userId());
         } catch (DuplicateEventException e) {
             log.debug("Duplicate message {}", record.key());
-
-        } catch (RetryableException e) {
-            log.warn("Retryable error", e);
-            throw e;
-
-        } catch (Exception e) {
-            log.error("Unexpected error", e);
-            throw e;
         }
     }
 }
