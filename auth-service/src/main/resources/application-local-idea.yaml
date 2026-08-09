@@ -54,6 +54,8 @@ app:
 logging:
   level:
     com.ssm.auth_service: TRACE
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
     org:
       springframework:
         security: DEBUG
