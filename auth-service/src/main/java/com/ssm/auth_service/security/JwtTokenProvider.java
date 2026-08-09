@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -25,11 +22,18 @@ public class JwtTokenProvider {
 
     private final SecretKey secretKey;
     private final Long accessTokenExpiration;
+    private final String issuer;
+    private final Set<String> audiences;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
-                            @Value("${jwt.access-token-expiration}") Long accessTokenExpiration) {
+                            @Value("${jwt.access-token-expiration}") Long accessTokenExpiration,
+                            @Value("${jwt.issuer}") String issuer,
+                            @Value("${jwt.audiences}") Set<String> audiences
+    ) {
         this.secretKey = createSecretKey(secretKey);
         this.accessTokenExpiration = accessTokenExpiration;
+        this.issuer = issuer;
+        this.audiences = audiences;
     }
 
     public String generateToken(UserPrincipal userPrincipal) {
@@ -67,10 +71,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userId)
-                .issuer(ApiConstants.ISSUER)
-                .audience()
-                .add(ApiConstants.AUDIENCE_CORE_SERVICE)
-                .add(ApiConstants.AUDIENCE_BILLING_SERVICE)
+                .issuer(issuer)
+                .audience().add(audiences)
                 .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessTokenExpiration))

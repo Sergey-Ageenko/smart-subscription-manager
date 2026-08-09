@@ -9,12 +9,9 @@ public class ApiConstants {
     public static final String USER_ROLES = "userRoles";
     public static final String PREFIX_REFRESH = "refresh:";
     public static final String PREFIX_USER_REFRESH = "user-refresh:";
-    public static final String ISSUER = "auth-service";
     public static final String REFRESH_TOKEN = "refresh-token";
     public static final String JWT_ERROR = "jwt-error";
     public static final String USER_REGISTERED = "user-registered";
     public static final String PREFIX_BLACKLIST = "blacklist:";
     public static final String PREFIX_BEARER = "Bearer ";
-    public static final String AUDIENCE_CORE_SERVICE = "core-service";
-    public static final String AUDIENCE_BILLING_SERVICE = "billing-service";
 }

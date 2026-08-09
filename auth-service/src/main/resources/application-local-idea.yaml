@@ -38,6 +38,8 @@ jwt:
   secret: "TGm9uN/S0kF0aGVf5iLJ7vrESh+rMMIqTZLGanm+od/vraHRrU5xyQN9DCkpTnjUwiaHrufbGewLkDlCycLtFw=="
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
+  issuer: "auth-service"
+  audiences: core-service, billing-service
 
 
 app:

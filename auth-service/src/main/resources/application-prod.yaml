@@ -31,6 +31,8 @@ jwt:
   secret: ${JWT_SECRET}
   access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
   refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+  issuer: ${JWT_ISSUER}
+  audiences: ${JWT_AUDIENCES}
 
 app:
   outbox:
