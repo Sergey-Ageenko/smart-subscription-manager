@@ -39,6 +39,10 @@ app:
     poll-interval-ms: ${POLL_INTERVAL_MS}
     recovery-interval-ms: ${RECOVERY_INTERVAL_MS}
 
+  cookie:
+    secure: true
+    max-age: ${COOKIE_MAX_AGE}
+
 logging:
   level:
     root: INFO

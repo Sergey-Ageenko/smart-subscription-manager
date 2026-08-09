@@ -47,6 +47,10 @@ app:
     poll-interval-ms: 5000
     recovery-interval-ms: 300000
 
+  cookie:
+    secure: false
+    max-age: 7d
+
 logging:
   level:
     com.ssm.auth_service: TRACE
