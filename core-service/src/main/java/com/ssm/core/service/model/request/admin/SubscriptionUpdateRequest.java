@@ -1,0 +1,15 @@
+package com.ssm.core.service.model.request.admin;
+
+import com.ssm.core.service.model.enums.SubscriptionCategory;
+import jakarta.validation.constraints.Size;
+
+public record SubscriptionUpdateRequest(
+
+        @Size(max = 100, message = "Subscription name must not exceed 100 characters.")
+        String name,
+
+        SubscriptionCategory category
+
+) {
+}
+
