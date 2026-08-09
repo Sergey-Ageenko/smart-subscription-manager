@@ -15,5 +15,6 @@ public interface ProfileSubscriptionService {
     CoreResponse<ProfileSubscriptionResponse> addSubscription(@NotNull UUID userId, @NotNull UUID subId, @NotNull ProfileSubscriptionAddRequest request);
     CoreResponse<ProfileSubscriptionResponse> updateSubscription(@NotNull UUID userId, @NotNull UUID subId, @NotNull ProfileSubscriptionUpdateRequest request);
     CoreResponse<ProfileSubscriptionResponse> cancelSubscription(@NotNull UUID userId, @NotNull UUID subId);
+    CoreResponse<ProfileSubscriptionResponse> activateSubscription(@NotNull UUID userId, @NotNull UUID subId);
     CoreResponse<ProfileSubscriptionResponse> deleteSubscription(@NotNull UUID userId, @NotNull UUID subId);
 }

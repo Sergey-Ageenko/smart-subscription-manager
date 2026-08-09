@@ -18,6 +18,7 @@ public enum ApiErrorMessage {
     SUBSCRIPTION_IS_ALREADY_EXISTS("Subscription with name: '%s' already exists"),
     SUBSCRIPTION_NOT_FOUND_BY_ID("Subscription with id: '%s' was not found"),
     USER_SUBSCRIPTION_IS_ALREADY_CANCELLED("User's subscription already cancelled. User id = '%s', sub id = '%s'"),
+    USER_SUBSCRIPTION_IS_ALREADY_ACTIVATED("User's subscription already activated. User id = '%s', sub id = '%s'"),
     INVALID_GATEWAY_AUTHENTICATION("Invalid gateway authentication");
     private final String message;
 

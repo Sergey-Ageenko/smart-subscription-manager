@@ -139,12 +139,33 @@ public class ProfileSubscriptionServiceImpl implements ProfileSubscriptionServic
 
     @Override
     @Transactional
+    public CoreResponse<ProfileSubscriptionResponse> activateSubscription(UUID userId, UUID subId) {
+        ProfileSubscription activatedProfileSubscription = profileSubscriptionRepository.findByProfile_UserIdAndSubscription_Id(userId, subId)
+                .orElseThrow(() -> new NotFoundException(
+                        ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND.getMessage(userId, subId)
+                ));
+        if (activatedProfileSubscription.getStatus() != SubscriptionStatus.CANCELLED) {
+            throw new DataExistException(ApiErrorMessage.USER_SUBSCRIPTION_IS_ALREADY_ACTIVATED.getMessage(userId, subId));
+        }
+        activatedProfileSubscription.setStatus(SubscriptionStatus.ACTIVE);
+        OutboxEvent event = subscriptionEventFactory.activated(userId);
+        outboxRepository.save(event);
+        log.info("Subscription {} activated successfully from user {}.",
+                activatedProfileSubscription.getSubscription().getId(),
+                activatedProfileSubscription.getProfile().getUserId());
+        return CoreResponse.createSuccessful(createResponse(activatedProfileSubscription));
+    }
+
+    @Override
+    @Transactional
     public CoreResponse<ProfileSubscriptionResponse> deleteSubscription(UUID userId, UUID subId) {
         ProfileSubscription deletedProfileSubscription = profileSubscriptionRepository.findByProfile_UserIdAndSubscription_Id(userId, subId)
                 .orElseThrow(() -> new NotFoundException(
                         ApiErrorMessage.USER_SUBSCRIPTION_NOT_FOUND.getMessage(userId, subId)
                 ));
         profileSubscriptionRepository.delete(deletedProfileSubscription);
+        OutboxEvent event = subscriptionEventFactory.deleted(userId);
+        outboxRepository.save(event);
         log.info("Subscription {} deleted successfully from user {}.",
                 deletedProfileSubscription.getSubscription().getId(),
                 deletedProfileSubscription.getProfile().getUserId());

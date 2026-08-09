@@ -1,10 +1,8 @@
 package com.ssm.core_service.factory;
 
+import com.ssm.common.event.*;
 import com.ssm.core_service.model.constant.ApiConstants;
 import com.ssm.core_service.model.entity.OutboxEvent;
-import com.ssm.common.event.SubscriptionCancelledEvent;
-import com.ssm.common.event.SubscriptionCreatedEvent;
-import com.ssm.common.event.SubscriptionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +43,28 @@ public class SubscriptionEventFactory {
                 );
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_CANCELLED,
+                event
+        );
+    }
+
+    public OutboxEvent activated(UUID userId) {
+        SubscriptionActivatedEvent event =
+                new SubscriptionActivatedEvent(
+                        userId, true
+                );
+        return outboxFactory.create(
+                ApiConstants.SUBSCRIPTION_ACTIVATED,
+                event
+        );
+    }
+
+    public OutboxEvent deleted(UUID userId) {
+        SubscriptionDeletedEvent event =
+                new SubscriptionDeletedEvent(
+                        userId, true
+                );
+        return outboxFactory.create(
+                ApiConstants.SUBSCRIPTION_DELETED,
                 event
         );
     }

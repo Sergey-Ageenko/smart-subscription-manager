@@ -30,7 +30,7 @@ services:
       args:
         MODULE: auth-service
     container_name: auth-service
-    ports:
+    expose:
       - "8081"
 
     environment:
@@ -57,7 +57,7 @@ services:
       args:
         MODULE: core-service
     container_name: core-service
-    ports:
+    expose:
       - "8082"
 
     environment:
@@ -79,7 +79,7 @@ services:
       args:
         MODULE: billing-service
     container_name: billing-service
-    ports:
+    expose:
       - "8083"
 
     environment:
@@ -96,8 +96,6 @@ services:
   redis:
     image: redis
     container_name: redis
-    ports:
-      - "6379:6379"
 
   postgres:
     image: postgres
@@ -105,8 +103,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
@@ -116,8 +112,6 @@ services:
   kafka:
     image: apache/kafka:4.1.1
     container_name: kafka
-    ports:
-       - "9092:9092"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller

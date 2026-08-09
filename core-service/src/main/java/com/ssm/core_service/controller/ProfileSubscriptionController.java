@@ -55,9 +55,16 @@ public class ProfileSubscriptionController {
 
     @PatchMapping("/{subscriptionId}/cancel")
     public ResponseEntity<CoreResponse<ProfileSubscriptionResponse>> cancelSubscription(@AuthenticationPrincipal UserPrincipal principal,
-                                                                                 @PathVariable UUID subscriptionId) {
+                                                                                        @PathVariable UUID subscriptionId) {
         return ResponseEntity.ok()
                 .body(profileSubscriptionService.cancelSubscription(principal.userId(), subscriptionId));
+    }
+
+    @PatchMapping("/{subscriptionId}/activate")
+    public ResponseEntity<CoreResponse<ProfileSubscriptionResponse>> activateSubscription(@AuthenticationPrincipal UserPrincipal principal,
+                                                                                          @PathVariable UUID subscriptionId) {
+        return ResponseEntity.ok()
+                .body(profileSubscriptionService.activateSubscription(principal.userId(), subscriptionId));
     }
 
     @DeleteMapping("/{subscriptionId}")
