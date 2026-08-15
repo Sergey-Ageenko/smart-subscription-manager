@@ -1,8 +1,9 @@
 package com.ssm.core.service.factory;
 
 import com.ssm.core.service.model.constant.ApiConstants;
+import com.ssm.core.service.model.dto.BudgetSettingsUpdatedDto;
 import com.ssm.core.service.model.entity.OutboxEvent;
-import com.ssm.common.event.BudgetSettingsUpdatedEvent;
+import com.ssm.events.BudgetSettingsUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +16,10 @@ public class BudgetEventFactory {
     private final OutboxEventFactory outboxFactory;
 
     public OutboxEvent updated(UUID userId) {
-        BudgetSettingsUpdatedEvent event = new BudgetSettingsUpdatedEvent(
-                userId, true
-        );
+        BudgetSettingsUpdatedDto dto = new BudgetSettingsUpdatedDto(userId);
         return outboxFactory.create(
                 ApiConstants.BUDGET_UPDATED,
-                event
+                dto
         );
     }
 }

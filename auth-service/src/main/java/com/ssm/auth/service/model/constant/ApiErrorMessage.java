@@ -15,7 +15,8 @@ public enum ApiErrorMessage {
     INVALID_USER_OR_PASSWORD("Invalid username or password. Try again"),
     USER_IS_BLOCKED("User with username: %s is blocked"),
     VALIDATION_FAILED("Validation failed"),
-    INVALID_AUTHORIZATION_HEADER("Invalid Authorization header");
+    INVALID_AUTHORIZATION_HEADER("Invalid Authorization header"),
+    INVALID_PAYLOAD_EVENT("Invalid payload for event: '%s'");
 
     private final String message;
 

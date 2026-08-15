@@ -1,9 +1,10 @@
 package com.ssm.auth.service.factory;
 
 import com.ssm.auth.service.model.constant.ApiConstants;
+import com.ssm.auth.service.model.dto.UserRegisteredDto;
 import com.ssm.auth.service.model.entity.OutboxEvent;
 import com.ssm.auth.service.model.request.RegisterRequest;
-import com.ssm.common.event.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +17,14 @@ public class UserEventFactory {
     private final OutboxEventFactory outboxFactory;
 
     public OutboxEvent registered(UUID userId, RegisterRequest request) {
-        UserRegisteredEvent event =
-                new UserRegisteredEvent(
-                        userId,
-                        request.getFirstName(),
-                        request.getLastName()
-                );
+        UserRegisteredDto dto = new UserRegisteredDto(
+                userId,
+                request.getFirstName(),
+                request.getLastName()
+        );
         return outboxFactory.create(
                 ApiConstants.USER_REGISTERED,
-                event
+                dto
         );
     }
 

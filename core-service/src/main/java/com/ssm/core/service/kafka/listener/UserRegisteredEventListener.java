@@ -1,13 +1,11 @@
 package com.ssm.core.service.kafka.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.common.exception.DuplicateEventException;
 import com.ssm.core.service.model.constant.ApiConstants;
 import com.ssm.core.service.model.entity.ProcessedEvent;
 import com.ssm.core.service.service.ProcessedEventService;
 import com.ssm.core.service.service.ProfileService;
-import com.ssm.common.event.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -26,22 +24,19 @@ public class UserRegisteredEventListener {
 
     private final ProfileService profileService;
     private final ProcessedEventService processedEventService;
-    private final ObjectMapper objectMapper;
 
     @KafkaListener(
             topics = ApiConstants.USER_REGISTERED,
             groupId = "core-group"
     )
     @Transactional
-    public void handle(ConsumerRecord<String, String> record) throws JsonProcessingException {
-        log.debug("Received message - eventId: {} - key: {} - payload: {}",
-                record.value(),
+    public void handle(ConsumerRecord<String, UserRegisteredEvent> record) {
+        log.debug("Received message - key: {} - payload: {}",
                 record.key(),
                 record.value()
         );
         try {
-            UserRegisteredEvent event =
-                    objectMapper.readValue(record.value(), UserRegisteredEvent.class);
+            UserRegisteredEvent event = record.value();
             processedEventService.process(ProcessedEvent.builder()
                     .eventId(UUID.fromString(record.key()))
                     .processedAt(LocalDateTime.now())

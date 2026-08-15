@@ -14,7 +14,7 @@ import com.ssm.core.service.repository.BudgetRepository;
 import com.ssm.core.service.repository.OutboxRepository;
 import com.ssm.core.service.repository.ProfileRepository;
 import com.ssm.core.service.service.ProfileService;
-import com.ssm.common.event.UserRegisteredEvent;
+import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,21 +49,21 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public void createProfile(UserRegisteredEvent event) {
-        if (profileRepository.existsByUserId(event.userId())) {
-            throw new DataExistException(ApiErrorMessage.USER_PROFILE_IS_ALREADY_EXISTS.getMessage(event.userId()));
+        if (profileRepository.existsByUserId(event.getUserId())) {
+            throw new DataExistException(ApiErrorMessage.USER_PROFILE_IS_ALREADY_EXISTS.getMessage(event.getUserId()));
         }
         Profile savedProfile = profileRepository.save(
                 Profile.builder()
-                        .userId(event.userId())
-                        .firstName(event.firstName())
-                        .lastName(event.lastName())
+                        .userId(event.getUserId())
+                        .firstName(event.getFirstName())
+                        .lastName(event.getLastName())
                         .build());
         Budget budget = budgetRepository.save(
                 Budget.builder()
                         .monthlyLimit(BigDecimal.ZERO)
                         .profile(savedProfile)
                         .build());
-        OutboxEvent outboxEvent = eventFactory.updated(event.userId());
+        OutboxEvent outboxEvent = eventFactory.updated(event.getUserId());
         outboxRepository.save(outboxEvent);
         log.info("Profile {} with budget created successfully. Budget id = {}", savedProfile.getId(), budget.getId());
     }

@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "SubscriptionCancelledEvent",
+  "namespace": "com.ssm.events",
+  "fields": [
+    {
+      "name": "userId",
+      "type": {
+              "type": "string",
+              "logicalType": "uuid"
+            }
+    }
+  ]
+}

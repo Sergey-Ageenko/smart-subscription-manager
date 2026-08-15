@@ -1,3 +1,4 @@
 rootProject.name = 'smart-subscription-manager'
 
 include 'auth-service', 'core-service', 'common', 'api-gateway', 'billing-service'
+include 'event-schemas'

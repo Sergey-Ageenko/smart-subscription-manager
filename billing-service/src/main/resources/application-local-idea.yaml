@@ -21,15 +21,16 @@ spring:
     schemas: billing_service
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:29092
     consumer:
       group-id: billing-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
       properties:
-        spring.json.trusted.packages: "com.ssm.events"
+        schema.registry.url: http://localhost:8086
+        specific.avro.reader: true
 
 services:
   core:

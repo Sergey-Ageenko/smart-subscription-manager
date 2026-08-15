@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '3.5.8' apply false
     id 'io.spring.dependency-management' version '1.1.7' apply false
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.9.1' apply false
 }
 
 allprojects {
@@ -16,6 +17,9 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url = uri('https://packages.confluent.io/maven/')
+        }
     }
 }
 

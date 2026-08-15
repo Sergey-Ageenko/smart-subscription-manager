@@ -1,8 +1,9 @@
 package com.ssm.core.service.factory;
 
-import com.ssm.common.event.*;
 import com.ssm.core.service.model.constant.ApiConstants;
+import com.ssm.core.service.model.dto.*;
 import com.ssm.core.service.model.entity.OutboxEvent;
+import com.ssm.events.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,57 +16,42 @@ public class SubscriptionEventFactory {
     private final OutboxEventFactory outboxFactory;
 
     public OutboxEvent created(UUID userId) {
-        SubscriptionCreatedEvent event =
-                new SubscriptionCreatedEvent(
-                        userId, true
-                );
+        SubscriptionCreatedDto dto = new SubscriptionCreatedDto(userId);
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_CREATED,
-                event
+                dto
         );
     }
 
     public OutboxEvent updated(UUID userId) {
-        SubscriptionUpdatedEvent event =
-                new SubscriptionUpdatedEvent(
-                        userId, true
-                );
+        SubscriptionUpdatedDto dto = new SubscriptionUpdatedDto(userId);
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_UPDATED,
-                event
+                dto
         );
     }
 
     public OutboxEvent cancelled(UUID userId) {
-        SubscriptionCancelledEvent event =
-                new SubscriptionCancelledEvent(
-                        userId, true
-                );
+        SubscriptionCancelledDto dto = new SubscriptionCancelledDto(userId);
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_CANCELLED,
-                event
+                dto
         );
     }
 
     public OutboxEvent activated(UUID userId) {
-        SubscriptionActivatedEvent event =
-                new SubscriptionActivatedEvent(
-                        userId, true
-                );
+        SubscriptionActivatedDto dto = new SubscriptionActivatedDto(userId);
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_ACTIVATED,
-                event
+                dto
         );
     }
 
     public OutboxEvent deleted(UUID userId) {
-        SubscriptionDeletedEvent event =
-                new SubscriptionDeletedEvent(
-                        userId, true
-                );
+        SubscriptionDeletedDto dto = new SubscriptionDeletedDto(userId);
         return outboxFactory.create(
                 ApiConstants.SUBSCRIPTION_DELETED,
-                event
+                dto
         );
     }
 }

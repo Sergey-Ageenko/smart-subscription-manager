@@ -16,7 +16,6 @@ public class OutboxEventFactory {
 
     private final ObjectMapper objectMapper;
 
-
     public OutboxEvent create(String eventName, Object event) {
         try {
             return OutboxEvent.builder()

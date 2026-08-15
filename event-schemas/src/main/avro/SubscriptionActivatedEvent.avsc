@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "SubscriptionActivatedEvent",
+  "namespace": "com.ssm.events",
+  "fields": [
+    {
+      "name": "userId",
+      "type": {
+              "type": "string",
+              "logicalType": "uuid"
+            }
+    }
+  ]
+}

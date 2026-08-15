@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "name": "UserRegisteredEvent",
+  "namespace": "com.ssm.events",
+  "fields": [
+    {
+      "name": "userId",
+      "type": {
+              "type": "string",
+              "logicalType": "uuid"
+            }
+          },
+    {
+      "name": "firstName",
+      "type": "string"
+    },
+    {
+      "name": "lastName",
+      "type": "string"
+    }
+  ]
+}

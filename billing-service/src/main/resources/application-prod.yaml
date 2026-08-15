@@ -10,10 +10,11 @@ spring:
       group-id: billing-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
       properties:
-        spring.json.trusted.packages: "com.ssm.events"
+        schema.registry.url: http://localhost:8086
+        specific.avro.reader: true
 
   jpa:
     properties:
