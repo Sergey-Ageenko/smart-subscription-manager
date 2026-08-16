@@ -8,12 +8,13 @@ allprojects {
     group = 'com.ssm'
     version = '1.0.0'
 
-
     ext {
         jjwtVersion = '0.13.0'
         postgresqlVersion = '42.7.11'
+        avroVersion = '1.12.1'
+        confluentVersion = '7.9.0'
+        springCloudVersion = '2025.0.0'
     }
-
 
     repositories {
         mavenCentral()
@@ -23,3 +24,33 @@ allprojects {
     }
 }
 
+subprojects {
+    apply plugin: 'java'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+configure([
+        project(':auth-service'),
+        project(':core-service'),
+        project(':billing-service'),
+        project(':api-gateway'),
+        project(':config-server')
+]) {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+}

@@ -12,7 +12,9 @@ COPY auth-service/build.gradle auth-service/
 COPY billing-service/build.gradle billing-service/
 COPY core-service/build.gradle core-service/
 COPY api-gateway/build.gradle api-gateway/
+COPY config-server/build.gradle config-server/
 COPY common/build.gradle common/
+COPY event-schemas/build.gradle event-schemas/
 
 RUN chmod +x gradlew
 
