@@ -2,7 +2,10 @@ package com.ssm.auth.service.advice;
 
 import com.ssm.auth.service.model.constant.ApiErrorMessage;
 import com.ssm.auth.service.utils.ApiError;
-import com.ssm.common.exception.*;
+import com.ssm.common.exception.DataExistException;
+import com.ssm.common.exception.NotFoundException;
+import com.ssm.common.exception.UnauthorizedException;
+import com.ssm.common.exception.UserBlockedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

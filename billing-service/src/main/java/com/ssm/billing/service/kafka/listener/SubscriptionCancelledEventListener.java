@@ -1,6 +1,5 @@
 package com.ssm.billing.service.kafka.listener;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.billing.service.model.constant.ApiConstants;
 import com.ssm.billing.service.model.entity.ProcessedEvent;
 import com.ssm.billing.service.service.ForecastService;

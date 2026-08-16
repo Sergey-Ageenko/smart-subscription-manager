@@ -4,7 +4,6 @@ import com.ssm.auth.service.model.constant.ApiConstants;
 import com.ssm.auth.service.model.dto.UserRegisteredDto;
 import com.ssm.auth.service.model.entity.OutboxEvent;
 import com.ssm.auth.service.model.request.RegisterRequest;
-import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

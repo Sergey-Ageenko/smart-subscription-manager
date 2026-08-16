@@ -1,7 +1,9 @@
 package com.ssm.core.service.model.request.admin;
 
 import com.ssm.core.service.model.enums.SubscriptionCategory;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record SubscriptionNewRequest(
 

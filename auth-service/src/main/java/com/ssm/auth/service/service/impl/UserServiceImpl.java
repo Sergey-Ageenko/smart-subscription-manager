@@ -2,10 +2,10 @@ package com.ssm.auth.service.service.impl;
 
 import com.ssm.auth.service.model.constant.ApiErrorMessage;
 import com.ssm.auth.service.model.entity.User;
-import com.ssm.common.exception.NotFoundException;
 import com.ssm.auth.service.repository.UserRepository;
 import com.ssm.auth.service.security.UserPrincipal;
 import com.ssm.auth.service.service.UserService;
+import com.ssm.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

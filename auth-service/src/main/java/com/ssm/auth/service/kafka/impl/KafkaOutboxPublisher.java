@@ -1,13 +1,8 @@
 package com.ssm.auth.service.kafka.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssm.auth.service.kafka.OutboxPublisher;
 import com.ssm.auth.service.mapper.AvroEventMapperRegistry;
-import com.ssm.auth.service.model.constant.ApiConstants;
-import com.ssm.auth.service.model.dto.UserRegisteredDto;
 import com.ssm.auth.service.model.entity.OutboxEvent;
-import com.ssm.events.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

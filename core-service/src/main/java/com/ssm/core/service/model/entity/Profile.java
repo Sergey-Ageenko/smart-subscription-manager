@@ -1,7 +1,6 @@
 package com.ssm.core.service.model.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
 
 import java.util.UUID;
