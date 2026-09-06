@@ -27,7 +27,7 @@ The project is built around an event-driven architecture where business events a
                          │            │  │             │
                          │ • Register │  │ • Users     │
                          │ • Login    │  │ • Subs      │
-                         │ • JWT      │  │ • Budgets   │
+                         │ • Refresh  │  │ • Budgets   │
                          └─────┬──────┘  └──────┬──────┘
                                │                │
                                │                │ Domain events
@@ -124,8 +124,6 @@ Core Service
      ▼
 Billing Service
 ```
-
-There is **no direct communication between Auth Service and Billing Service**.
 
 ## Authentication
 
@@ -354,6 +352,7 @@ API Gateway
   ▼
 Core Service
   │
+  │── Validate request
   ├── Update budget settings
   └── Publish BudgetSettingsUpdatedEvent
                  │
@@ -479,19 +478,15 @@ smart-subscription-manager/
 │   └── ...
 │
 ├── event-schemas/
-│   └── src/main/avro/
-│       ├── UserRegisteredEvent.avsc
-│       ├── SubscriptionCreatedEvent.avsc
-│       ├── SubscriptionUpdatedEvent.avsc
-│       ├── SubscriptionActivatedEvent.avsc
-│       ├── SubscriptionCancelledEvent.avsc
-│       ├── SubscriptionDeletedEvent.avsc
-│       └── BudgetSettingsUpdatedEvent.avsc
+│   └── ...
+│
+├── common/
+│   └── exceptions/
+│       └── ...
 │
 ├── docker/
-│   └── Dockerfile
+│   └── ...
 │
-├── docker-compose.yml
 ├── build.gradle
 ├── settings.gradle
 └── README.md
@@ -515,8 +510,7 @@ smart-subscription-manager/
 * Apache Kafka
 * Apache Avro
 * Confluent Schema Registry
-* Spring Kafka
-
+  
 ### Databases
 
 * PostgreSQL
@@ -534,132 +528,7 @@ smart-subscription-manager/
 * JUnit 5
 * Mockito
 * Spring Boot Test
-* Spring Security Test
 * Testcontainers
-
-## Testing
-
-The project uses unit and integration tests.
-
-Testcontainers is used for integration testing with real infrastructure dependencies such as PostgreSQL.
-
-Example test stack:
-
-```text
-JUnit 5
-   │
-   ▼
-Spring Boot Test
-   │
-   ▼
-Testcontainers
-   │
-   └── PostgreSQL
-```
-
-This allows integration tests to run against an environment closer to the real application infrastructure.
-
-## Running the Project
-
-### Prerequisites
-
-Make sure the following are installed:
-
-* Java 21
-* Docker
-* Docker Compose
-* Git
-
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-cd smart-subscription-manager
-```
-
-### 2. Configure environment variables
-
-Create a `.env` file if your Docker Compose configuration expects environment variables.
-
-Provide the values required by the project, including secrets and environment-specific configuration.
-
-Do not commit `.env` or other files containing secrets.
-
-### 3. Start the application
-
-Build and start all services:
-
-```bash
-docker compose up -d --build
-```
-
-Check running containers:
-
-```bash
-docker compose ps
-```
-
-### 4. Check application logs
-
-To view logs from all services:
-
-```bash
-docker compose logs -f
-```
-
-To view logs of a specific service:
-
-```bash
-docker compose logs -f api-gateway
-```
-
-or:
-
-```bash
-docker compose logs -f auth-service
-```
-
-### 5. Stop the application
-
-```bash
-docker compose down
-```
-
-To remove containers and associated volumes:
-
-```bash
-docker compose down -v
-```
-
-Use the `-v` option carefully because it removes persistent Docker volumes, including database data.
-
-## Local Development
-
-The project can also be built with Gradle.
-
-Build the project:
-
-```bash
-./gradlew build
-```
-
-Run tests:
-
-```bash
-./gradlew test
-```
-
-On Windows:
-
-```bash
-gradlew.bat build
-```
-
-```bash
-gradlew.bat test
-```
-
-Infrastructure services such as PostgreSQL, Redis, Kafka and Schema Registry can be started using Docker Compose while individual Spring Boot services are run from the IDE.
 
 ## Design Principles
 
